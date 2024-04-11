@@ -4,4 +4,7 @@ import jakarta.persistence.Entity;
 
 @Entity
 public class Request extends Post {
+    public Request() {
+        super();
+    }
 }

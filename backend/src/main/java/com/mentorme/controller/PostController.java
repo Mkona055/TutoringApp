@@ -3,11 +3,13 @@ package com.mentorme.controller;
 import com.mentorme.dao.OfferRepository;
 import com.mentorme.dao.RequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
+@Controller
 public class PostController {
 
-    RequestRepository requests;
-    OfferRepository offers;
+    private RequestRepository requests;
+    private OfferRepository offers;
 
     @Autowired
     public PostController(RequestRepository requests, OfferRepository offers) {

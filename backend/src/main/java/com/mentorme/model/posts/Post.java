@@ -23,4 +23,5 @@ public abstract class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Post() {}
 }
