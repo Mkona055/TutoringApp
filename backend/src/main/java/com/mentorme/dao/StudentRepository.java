@@ -1,9 +1,9 @@
 package com.mentorme.dao;
 
-import com.mentorme.model.posts.Post;
+import com.mentorme.model.users.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PostRepository extends JpaRepository<Post, Integer> {
+public interface StudentRepository extends JpaRepository<Student, Integer> {
 }
