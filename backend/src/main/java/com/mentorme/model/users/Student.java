@@ -1,4 +1,4 @@
 package com.mentorme.model.users;
 
-public class Student implements User {
+public class Student extends User {
 }

@@ -1,4 +1,4 @@
 package com.mentorme.model.posts;
 
-public class Request implements Post {
+public class Request extends Post {
 }

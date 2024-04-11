@@ -1,4 +1,4 @@
 package com.mentorme.model.posts;
 
-public interface Post {
+public abstract class Post {
 }
