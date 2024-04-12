@@ -1,6 +1,5 @@
 package com.mentorme.model.users;
 
-import com.mentorme.model.Role;
 import jakarta.persistence.*;
 
 @Entity
