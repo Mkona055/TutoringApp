@@ -1,10 +1,8 @@
 package com.mentorme.model.users;
 
-import com.mentorme.model.Role;
 import jakarta.persistence.*;
 
 @Entity
-//@Table(name = "tutor")
 @DiscriminatorValue(value = "TUTOR")
 public class Tutor extends User {
 //    @Id
