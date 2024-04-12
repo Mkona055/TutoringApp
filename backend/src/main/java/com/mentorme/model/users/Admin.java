@@ -3,8 +3,8 @@ package com.mentorme.model.users;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "admin")
-public class Admin {
+@DiscriminatorValue("ADMIN")
+public class Admin extends User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -14,7 +14,7 @@ public class Admin {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 

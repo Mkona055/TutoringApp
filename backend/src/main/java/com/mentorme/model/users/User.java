@@ -4,27 +4,28 @@ import com.mentorme.model.Role;
 import jakarta.persistence.*;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // or InheritanceType.TABLE_PER_CLASS, InheritanceType.JOINED
+@DiscriminatorColumn(name = "ROLE", discriminatorType = DiscriminatorType.STRING)
 public abstract class User {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int id;
+    protected int id;
 
     @Column(name = "f_name")
-    private String firstName;
-
+    protected String firstName;
 
     @Column(name = "lName")
-    private String lastName;
+    protected String lastName;
 
     @Column
-    private String email;
+    protected String email;
 
     @Column(name = "password")
-    private String passwordHash;
+    protected String passwordHash;
 
-    @Column(name = "role")
-    private Role role;
+////    @Column(name = "role")
+//    protected Role role;
 
     public User() {}
 
@@ -68,11 +69,11 @@ public abstract class User {
         this.passwordHash = passwordHash;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
+//    public Role getRole() {
+//        return role;
+//    }
+//
+//    public void setRole(Role role) {
+//        this.role = role;
+//    }
 }
