@@ -6,7 +6,4 @@ import jakarta.persistence.Entity;
 @Entity
 @DiscriminatorValue("REQUEST")
 public class Request extends Post {
-    public Request() {
-        super();
-    }
 }
