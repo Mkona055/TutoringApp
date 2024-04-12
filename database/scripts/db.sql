@@ -1,53 +1,54 @@
+DROP SCHEMA  IF EXISTS MentorMeDb;
 CREATE SCHEMA IF NOT EXISTS MentorMeDb;
 USE MentorMeDb;
 
-CREATE TABLE User (
-    user_Id INT AUTO_INCREMENT PRIMARY KEY,
-    Location VARCHAR(50),
-    fName VARCHAR(50),
-    lName VARCHAR(50),
+CREATE TABLE user (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    location VARCHAR(50),
+    f_name VARCHAR(50),
+    l_name VARCHAR(50),
     email VARCHAR(50),
     password VARCHAR(50),
     role VARCHAR(50)
 );
 
-CREATE TABLE Admin (
-    admin_Id INT AUTO_INCREMENT PRIMARY KEY,
-    user_Id INT,
-    FOREIGN KEY (user_Id) REFERENCES User(user_Id)
+CREATE TABLE admin (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES User(id)
 );
 
-CREATE TABLE Student (
-    student_Id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE student (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     user_Id INT,
-    FOREIGN KEY (user_Id) REFERENCES User(user_Id)
+    FOREIGN KEY (user_id) REFERENCES User(id)
 );
 
-CREATE TABLE Tutor (
-    tutor_Id INT AUTO_INCREMENT PRIMARY KEY,
-    user_Id INT,
-    FOREIGN KEY (user_Id) REFERENCES User(user_Id)
+CREATE TABLE tutor (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES User(id)
 );
 
-CREATE TABLE Tag (
-    tag_Id INT AUTO_INCREMENT PRIMARY KEY,
-    Name VARCHAR(255)
+CREATE TABLE tag (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255)
 );
 
-CREATE TABLE Post (
-    post_Id INT AUTO_INCREMENT PRIMARY KEY,
-    inPerson BOOLEAN,
-    postDesc VARCHAR(255),
-    user_Id INT,
+CREATE TABLE post (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    in_person BOOLEAN,
+    post_desc VARCHAR(255),
+    user_id INT,
     hourly_rate DOUBLE,
-    FOREIGN KEY (user_Id) REFERENCES User(user_Id)
+    FOREIGN KEY (user_id) REFERENCES User(id)
 );
 
-CREATE TABLE PostTag (
-    tag_Id INT,
-    post_Id INT,
-    isOffer BOOLEAN,
-    PRIMARY KEY (tag_Id, post_Id, isOffer),
-    FOREIGN KEY (tag_Id) REFERENCES Tag(tag_Id),
-    FOREIGN KEY (post_Id) REFERENCES Post(post_Id)
+CREATE TABLE post_tag (
+    id INT,
+    post_id INT,
+    is_offer BOOLEAN,
+    PRIMARY KEY (id, post_id, is_offer),
+    FOREIGN KEY (id) REFERENCES Tag(id),
+    FOREIGN KEY (post_id) REFERENCES Post(id)
 );
