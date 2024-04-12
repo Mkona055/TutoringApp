@@ -18,7 +18,7 @@ import java.util.*;
 import com.mentorme.model.users.*;
 
 @RestController
-@RequestMapping()
+@RequestMapping("/users")
 @CrossOrigin
 public class UserController {
 
@@ -33,7 +33,7 @@ public class UserController {
         this.tutors = tutors;
     }
 
-    @GetMapping("/users")
+    @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> userList = new ArrayList<>();
         userList.addAll(admins.findAll());
@@ -75,7 +75,5 @@ public class UserController {
     }
 
     
-
-
 
 }
