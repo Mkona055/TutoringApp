@@ -9,25 +9,7 @@ CREATE TABLE user (
     l_name VARCHAR(50),
     email VARCHAR(50),
     password VARCHAR(50),
-    role TINYINT
-);
-
-CREATE TABLE admin (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    FOREIGN KEY (user_id) REFERENCES User(id)
-);
-
-CREATE TABLE student (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_Id INT,
-    FOREIGN KEY (user_id) REFERENCES User(id)
-);
-
-CREATE TABLE tutor (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    FOREIGN KEY (user_id) REFERENCES User(id)
+    `role` VARCHAR(20)
 );
 
 CREATE TABLE tag (
@@ -41,14 +23,14 @@ CREATE TABLE post (
     post_desc VARCHAR(255),
     user_id INT,
     hourly_rate DOUBLE,
+    `type` VARCHAR(20),
     FOREIGN KEY (user_id) REFERENCES User(id)
 );
 
 CREATE TABLE post_tag (
     id INT,
     post_id INT,
-    is_offer BOOLEAN,
-    PRIMARY KEY (id, post_id, is_offer),
+    PRIMARY KEY (id, post_id),
     FOREIGN KEY (id) REFERENCES Tag(id),
     FOREIGN KEY (post_id) REFERENCES Post(id)
 );
