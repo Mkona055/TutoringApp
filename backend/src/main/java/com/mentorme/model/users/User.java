@@ -15,7 +15,7 @@ public abstract class User {
     @Column(name = "f_name")
     protected String firstName;
 
-    @Column(name = "lName")
+    @Column(name = "l_name")
     protected String lastName;
 
     @Column
