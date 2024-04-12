@@ -9,9 +9,9 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class UserController {
 
-    private AdminRepository admins;
-    private StudentRepository students;
-    private TutorRepository tutors;
+    private final AdminRepository admins;
+    private final StudentRepository students;
+    private final TutorRepository tutors;
 
     @Autowired
     public UserController(AdminRepository admins, StudentRepository students, TutorRepository tutors) {

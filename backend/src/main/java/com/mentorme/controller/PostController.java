@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class PostController {
 
-    private RequestRepository requests;
-    private OfferRepository offers;
+    private final RequestRepository requests;
+    private final OfferRepository offers;
 
     @Autowired
     public PostController(RequestRepository requests, OfferRepository offers) {
