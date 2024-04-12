@@ -28,9 +28,9 @@ CREATE TABLE post (
 );
 
 CREATE TABLE post_tag (
-    id INT,
+    tag_id INT,
     post_id INT,
-    PRIMARY KEY (id, post_id),
-    FOREIGN KEY (id) REFERENCES Tag(id),
+    PRIMARY KEY (tag_id, post_id),
+    FOREIGN KEY (tag_id) REFERENCES Tag(id),
     FOREIGN KEY (post_id) REFERENCES Post(id)
 );
