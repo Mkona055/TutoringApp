@@ -1,0 +1,49 @@
+.criteria{
+    background-color: var(--team-purple) !important;
+}
+.bi-x-lg{
+    cursor: pointer;
+}
+input[type='checkbox'] {
+    color: aliceblue !important;
+    accent-color: var(--team-purple) !important;
+}
+#filter-container{
+    background-color: white !important;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.tag-selector {
+    position: relative;
+  }
+  
+  .tag-selector-input {
+    position: relative;
+  }
+  
+  .tag-selector-dropdown {
+    border-radius: 5%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .tag-selector-dropdown .form-check {
+    padding: 8
+  }  
+
+/* Style the slider handle */
+.form-range::-webkit-slider-thumb {
+    background: var(--team-purple) !important; /* Purple handle */
+    cursor: pointer;
+}
+  
+  
+  /* Hover effect for the slider */
