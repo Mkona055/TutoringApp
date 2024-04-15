@@ -35,16 +35,13 @@ public class PostController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Post>> getAllPosts() {
-        List<Post> postList = new ArrayList<>();
-        postList.addAll(requests.findAll());
-        postList.addAll(offers.findAll());
-        return new ResponseEntity<>(postList, HttpStatus.OK);
+        return new ResponseEntity<>(posts.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/post/{id}")
     public ResponseEntity<Post> getPost(@PathVariable int id) {
-        Post post = requests.findById(id).orElse(null);
-        if (post==null) offers.findById(id);
+        Post post = posts.findById(id).orElse(null);
+//        if (post==null) offers.findById(id);
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
@@ -61,6 +58,12 @@ public class PostController {
     @GetMapping("/offers/{tag}")
     public ResponseEntity<List<Offer>> getOffersByTag(@PathVariable String tag) {
         return new ResponseEntity<>(offers.findOffersByTags_Name(tag), HttpStatus.OK);
+    }
+
+    @GetMapping("/bytag")
+    public ResponseEntity<List<Post>> getPostsByTags(@RequestParam List<String> tags) {
+        return new ResponseEntity<>(posts.findPostsByTags_NameIn(tags), HttpStatus.OK);
+//        http://localhost:8080/posts/tags?tags=JavaScript&tags=Python
     }
 
     @GetMapping("/requests/{tag}")
