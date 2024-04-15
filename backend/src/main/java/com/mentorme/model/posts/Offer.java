@@ -6,7 +6,4 @@ import jakarta.persistence.Entity;
 @Entity
 @DiscriminatorValue("OFFER")
 public class Offer extends Post {
-    public Offer() {
-        super();
-    }
 }

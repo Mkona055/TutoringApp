@@ -1,6 +1,5 @@
 package com.mentorme.model.users;
 
-import com.mentorme.model.Role;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,20 +11,23 @@ public abstract class User {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     protected int id;
 
+    @Column(name = "location")
+    protected String location;
+
     @Column(name = "f_name")
     protected String firstName;
 
-    @Column(name = "lName")
+    @Column(name = "l_name")
     protected String lastName;
 
-    @Column
+    @Column(name = "email")
     protected String email;
 
     @Column(name = "password")
     protected String passwordHash;
 
-////    @Column(name = "role")
-//    protected Role role;
+    @Column(name = "role", insertable = false, updatable = false)
+    protected String role;
 
     public User() {}
 
@@ -69,11 +71,19 @@ public abstract class User {
         this.passwordHash = passwordHash;
     }
 
-//    public Role getRole() {
-//        return role;
-//    }
-//
-//    public void setRole(Role role) {
+   public String getRole() {
+       return role;
+   }
+
+   public String getLocation() {
+    return location;
+}
+
+public void setLocation(String location) {
+    this.location = location;
+}
+
+//    public void setRole(String role) {
 //        this.role = role;
 //    }
 }

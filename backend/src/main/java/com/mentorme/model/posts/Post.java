@@ -13,26 +13,70 @@ public abstract class Post {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int id;
+    protected int id;
 
     @Column
-    private boolean inPerson;
+    protected boolean inPerson;
+
+    @Column(name = "post_desc")
+    protected String description;
 
     @Column
-    private String description;
-
-    @Column
-    private Double hourlyRate;
+    protected Double hourlyRate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    protected User user;
 
     @ManyToMany
     @JoinTable(name = "post_tag",
             joinColumns = {@JoinColumn(name = "post_id")},
             inverseJoinColumns = {@JoinColumn(name = "tag_id")})
-    private Set<Tag> tags;
+    protected Set<Tag> tags;
 
     public Post() {}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public boolean isInPerson() {
+        return inPerson;
+    }
+
+    public void setInPerson(boolean inPerson) {
+        this.inPerson = inPerson;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Double getHourlyRate() {
+        return hourlyRate;
+    }
+
+    public void setHourlyRate(Double hourlyRate) {
+        this.hourlyRate = hourlyRate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
 }
