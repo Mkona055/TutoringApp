@@ -1,0 +1,150 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    },
+    {
+      "email": "landlord@yopmail.com",
+      "password": "Bonbon05606677@",
+      "role": "TUTOR",
+      "firstName": "Soma",
+      "lastName": "Konate",
+      "location": "GATINEAU, QC",
+      "id": 2
+    },
+    {
+      "email": "somakonate45@gmail.com",
+      "password": "Bonbon05606677@",
+      "firstName": "Soma",
+      "lastName": "Konate",
+      "location": "Gatineau",
+      "id": 3
+    },
+    {
+      "email": "somakonate45@gmail.com",
+      "password": "564587",
+      "firstName": "Soma",
+      "lastName": "Konate",
+      "location": "Gatineau",
+      "id": 4
+    },
+    {
+      "email": "somakonate45@gmail.com",
+      "password": "1",
+      "firstName": "Soma",
+      "lastName": "Konate",
+      "location": "Vancouver",
+      "id": 5
+    },
+    {
+      "email": "somakonate45@gmail.com",
+      "password": "Bonbon05606677@",
+      "firstName": "Soma",
+      "lastName": "Konate",
+      "id": 6
+    },
+    {
+      "email": "somakonate45@gmail.com",
+      "password": "Bonbon05606677@",
+      "firstName": "Soma",
+      "lastName": "Konate",
+      "id": 7
+    }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "title": "Description",
+      "inPerson": true,
+      "description": "Example Post Description",
+      "hourlyRate": 20.5,
+      "user": {
+        "id": 1,
+        "firstName": "Marco",
+        "lastName": "Konate",
+        "email": "somakonate45@gmail.com"
+      },
+      "tags": [
+        { "id": 1, "name": "React" },
+        { "id": 2, "name": "Spring Boot" }
+      ]
+    },
+
+    {
+      "id": 2,
+      "title": "React Developer Needed",
+      "inPerson": false,
+      "description": "Looking for a React developer to work on an exciting project.",
+      "hourlyRate": 25.0,
+      "user": {
+        "id": 2,
+        "firstName": "Sarah",
+        "lastName": "Jones",
+        "email": "sarahjones@example.com"
+      },
+      "tags": [
+        { "id": 1, "name": "React" },
+        { "id": 3, "name": "JavaScript" }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Spring Boot API Developer",
+      "inPerson": true,
+      "description": "Need a Spring Boot developer to create RESTful APIs.",
+      "hourlyRate": 30.0,
+      "user": {
+        "id": 3,
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "johnsmith@example.com"
+      },
+      "tags": [
+        { "id": 2, "name": "Spring Boot" },
+        { "id": 4, "name": "Java" }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Full Stack Developer",
+      "inPerson": false,
+      "description": "Looking for a full stack developer with experience in React and Spring Boot.",
+      "hourlyRate": 40.0,
+      "user": {
+        "id": 4,
+        "firstName": "Emily",
+        "lastName": "Davis",
+        "email": "emilydavis@example.com"
+      },
+      "tags": [
+        { "id": 1, "name": "React" },
+        { "id": 2, "name": "Spring Boot" },
+        { "id": 5, "name": "Node.js" }
+      ]
+    }
+  ],
+  "tags": [
+    {
+      "id": 1,
+      "name": "React"
+    },
+    {
+      "id": 2,
+      "name": "Spring Boot"
+    },
+    {
+      "id": 3,
+      "name": "JavaScript"
+    },
+    {
+      "id": 4,
+      "name": "Java"
+    },
+    {
+      "id": 5,
+      "name": "Node.js"
+    }
+  ]
+}
