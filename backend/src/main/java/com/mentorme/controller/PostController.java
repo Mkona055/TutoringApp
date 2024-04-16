@@ -68,12 +68,12 @@ public class PostController {
 
     @GetMapping("/offers/bytag")
     public ResponseEntity<List<Post>> getOffersByTags(@RequestParam List<String> tags) {
-        return new ResponseEntity<>(offers.findPostsByTags_NameIn(tags), HttpStatus.OK);
+        return new ResponseEntity<>(offers.findOffersByTags_NameIn(tags), HttpStatus.OK);
     }
 
     @GetMapping("/requests/bytag")
     public ResponseEntity<List<Post>> getRequestsByTags(@RequestParam List<String> tags) {
-        return new ResponseEntity<>(requests.findPostsByTags_NameIn(tags), HttpStatus.OK);
+        return new ResponseEntity<>(requests.findRequestsByTags_NameIn(tags), HttpStatus.OK);
     }
 
     @GetMapping("/requests/{tag}")

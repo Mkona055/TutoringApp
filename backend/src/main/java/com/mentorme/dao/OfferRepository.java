@@ -15,4 +15,6 @@ import java.util.List;
 public interface OfferRepository extends JpaRepository<Offer, Integer> {
 
     List<Offer> findOffersByTags_Name(String Name);
+
+    List<Post> findOffersByTags_NameIn(List<String> tags);
 }
