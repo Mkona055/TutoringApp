@@ -66,6 +66,16 @@ public class PostController {
 //        http://localhost:8080/posts/tags?tags=JavaScript&tags=Python
     }
 
+    @GetMapping("/offers/bytag")
+    public ResponseEntity<List<Post>> getOffersByTags(@RequestParam List<String> tags) {
+        return new ResponseEntity<>(offers.findPostsByTags_NameIn(tags), HttpStatus.OK);
+    }
+
+    @GetMapping("/requests/bytag")
+    public ResponseEntity<List<Post>> getRequestsByTags(@RequestParam List<String> tags) {
+        return new ResponseEntity<>(requests.findPostsByTags_NameIn(tags), HttpStatus.OK);
+    }
+
     @GetMapping("/requests/{tag}")
     public ResponseEntity<List<Request>> getRequestsByTag(@PathVariable String tag) {
         return new ResponseEntity<>(requests.findRequestsByTags_Name(tag), HttpStatus.OK);
