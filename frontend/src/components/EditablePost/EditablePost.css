@@ -1,0 +1,37 @@
+.card-text {
+  margin-bottom: 0.5rem !important;
+}
+
+.tag-selector {
+  position: relative;
+}
+
+.tag-selector-input {
+  position: relative;
+}
+
+.tag-selector-dropdown {
+  border-radius: 2%;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.tag-selector-dropdown .form-check {
+  padding: 8;
+}
+
+.deleteButton {
+    display: none !important;
+  }
+  
+.card:hover .deleteButton {
+    display: block !important;
+}

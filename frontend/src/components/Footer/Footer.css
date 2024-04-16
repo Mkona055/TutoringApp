@@ -1,0 +1,11 @@
+/* Footer.css */
+
+.footer {
+    background-color: var(--team-purple-dark);
+    color: white;
+  }
+  
+  .footer .bottom-section {
+    text-align: center;
+  }
+  

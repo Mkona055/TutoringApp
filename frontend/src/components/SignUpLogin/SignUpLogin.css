@@ -1,0 +1,38 @@
+:root{
+    --amplify-components-tabs-item-active-color:var(--team-purple);
+    --amplify-components-tabs-item-active-border-color:var(--team-purple);
+    --amplify-components-button-primary-background-color:var(--team-purple);
+  
+}
+
+.card-title{
+    color: var(--team-purple)!important;
+    font-weight: bold;
+}
+
+.bg-team-purple{
+    background-color: var(--team-purple) !important;
+    border: 1px solid var(--team-purple) !important;
+
+}
+
+.bg-team-purple:hover{
+    background-color: var(--team-purple-dark) !important;
+}
+
+.colorFullText{
+    font-family: Madang Lovers;
+    font-size: 80px !important;
+    background: -webkit-linear-gradient(30deg,rgb(217, 121, 247),rgb(65, 1, 90));
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.btn-link{
+    text-decoration: none !important; 
+    color:var(--team-purple-dark) !important;
+}
+.btn-link:hover{
+    color:var(--team-purple-light) !important;
+}
+
