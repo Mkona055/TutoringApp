@@ -1,11 +1,18 @@
 package com.mentorme.model.users;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE) // or InheritanceType.TABLE_PER_CLASS, InheritanceType.JOINED
 @DiscriminatorColumn(name = "ROLE", discriminatorType = DiscriminatorType.STRING)
-public abstract class User {
+public abstract class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -26,8 +33,8 @@ public abstract class User {
     @Column(name = "password")
     protected String passwordHash;
 
-//    @Column(name = "role", insertable = false, updatable = false)
-//    protected String role;
+    @Column(name = "role", insertable = false, updatable = false)
+    protected String role;
 
     public User() {}
 
@@ -71,9 +78,13 @@ public abstract class User {
         this.passwordHash = passwordHash;
     }
 
-//   public String getRole() {
-//       return role;
-//   }
+    public void setRole(String role){
+        this.role = role;
+    }
+
+   public String getRole() {
+       return role;
+   }
 
    public String getLocation() {
     return location;
@@ -83,7 +94,33 @@ public void setLocation(String location) {
     this.location = location;
 }
 
-//    public void setRole(String role) {
-//        this.role = role;
-//    }
+public Collection<? extends GrantedAuthority> getAuthorities() {
+    return List.of(new SimpleGrantedAuthority(role));
+}
+
+public String getUsername() {
+    return email;
+}
+
+public boolean isAccountNonExpired() {
+    return true;
+}
+
+public boolean isAccountNonLocked(){
+    return true;
+}
+
+public boolean isCredentialsNonExpired() {
+    return true;
+}
+
+public boolean isEnabled() {
+    return true;
+}
+
+public String getPassword(){
+    return passwordHash;
+}
+
+
 }

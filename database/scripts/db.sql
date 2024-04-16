@@ -8,7 +8,7 @@ CREATE TABLE user (
     f_name VARCHAR(50),
     l_name VARCHAR(50),
     email VARCHAR(50),
-    password VARCHAR(50),
+    password VARCHAR(500),
     `role` VARCHAR(20)
 );
 
@@ -19,6 +19,7 @@ CREATE TABLE tag (
 
 CREATE TABLE post (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255),
     in_person BOOLEAN,
     post_desc VARCHAR(255),
     user_id INT,
