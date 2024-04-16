@@ -4,6 +4,7 @@ import com.mentorme.model.Tag;
 import com.mentorme.model.users.User;
 import jakarta.persistence.*;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -78,5 +79,18 @@ public abstract class Post {
 
     public Set<Tag> getTags() {
         return tags;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Post post = (Post) object;
+        return id == post.id && inPerson == post.inPerson && Objects.equals(description, post.description) && Objects.equals(hourlyRate, post.hourlyRate) && Objects.equals(user, post.user) && Objects.equals(tags, post.tags);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, inPerson, description, hourlyRate, user, tags);
     }
 }

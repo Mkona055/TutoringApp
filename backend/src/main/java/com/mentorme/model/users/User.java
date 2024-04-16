@@ -26,8 +26,8 @@ public abstract class User {
     @Column(name = "password")
     protected String passwordHash;
 
-    @Column(name = "role", insertable = false, updatable = false)
-    protected String role;
+//    @Column(name = "role", insertable = false, updatable = false)
+//    protected String role;
 
     public User() {}
 
@@ -71,9 +71,9 @@ public abstract class User {
         this.passwordHash = passwordHash;
     }
 
-   public String getRole() {
-       return role;
-   }
+//   public String getRole() {
+//       return role;
+//   }
 
    public String getLocation() {
     return location;

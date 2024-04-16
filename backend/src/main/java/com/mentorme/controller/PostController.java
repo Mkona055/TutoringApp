@@ -3,19 +3,16 @@ package com.mentorme.controller;
 import com.mentorme.dao.OfferRepository;
 import com.mentorme.dao.PostRepository;
 import com.mentorme.dao.RequestRepository;
+import com.mentorme.dao.TagRepository;
 import com.mentorme.model.posts.Offer;
 import com.mentorme.model.posts.Post;
 import com.mentorme.model.posts.Request;
-import com.mentorme.model.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/feed")
@@ -25,12 +22,14 @@ public class PostController {
     private final RequestRepository requests;
     private final OfferRepository offers;
     private final PostRepository posts;
+    private final TagRepository tags;
 
     @Autowired
-    public PostController(RequestRepository requests, OfferRepository offers, PostRepository posts) {
+    public PostController(RequestRepository requests, OfferRepository offers, PostRepository posts, TagRepository tags) {
         this.requests = requests;
         this.offers = offers;
         this.posts = posts;
+        this.tags = tags;
     }
 
     @GetMapping("/all")
@@ -63,7 +62,6 @@ public class PostController {
     @GetMapping("/bytag")
     public ResponseEntity<List<Post>> getPostsByTags(@RequestParam List<String> tags) {
         return new ResponseEntity<>(posts.findPostsByTags_NameIn(tags), HttpStatus.OK);
-//        http://localhost:8080/posts/tags?tags=JavaScript&tags=Python
     }
 
     @GetMapping("/offers/bytag")
@@ -74,6 +72,21 @@ public class PostController {
     @GetMapping("/requests/bytag")
     public ResponseEntity<List<Post>> getRequestsByTags(@RequestParam List<String> tags) {
         return new ResponseEntity<>(requests.findRequestsByTags_NameIn(tags), HttpStatus.OK);
+    }
+
+    @GetMapping("/filtered")
+    public ResponseEntity<List<Post>> getPostsFiltered(
+            @RequestParam(required = false) List<String> tags,
+            @RequestParam(required = false) Double maxHourlyRate,
+            @RequestParam(required = false) String location
+    ) {
+        Set<Post> results = new HashSet<>(posts.findAll());
+        // .retainAll() acts as intersection of two sets
+        if (tags!=null)             results.retainAll(posts.findPostsByTags_NameIn(tags));
+        if (maxHourlyRate!=null)    results.retainAll(posts.findPostsByHourlyRateIsLessThanEqual(maxHourlyRate));
+        if (location!=null)         results.retainAll(posts.findPostByUser_Location(location));
+
+        return new ResponseEntity<>(new ArrayList<>(results), HttpStatus.OK);
     }
 
     @GetMapping("/requests/{tag}")
