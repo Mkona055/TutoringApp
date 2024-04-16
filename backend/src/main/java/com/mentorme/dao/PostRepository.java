@@ -13,6 +13,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     Post findPostById(int id);
 
+    List<Post> findPostsByUserId(int id);
+
     List<Post> findPostsByTags_NameIn(List<String> Name);
 
     List<Post> findPostsByHourlyRateIsLessThanEqual(double rate);

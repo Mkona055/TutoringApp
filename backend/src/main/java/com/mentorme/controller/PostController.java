@@ -9,6 +9,7 @@ import com.mentorme.model.posts.Post;
 import com.mentorme.model.posts.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -104,6 +105,11 @@ public class PostController {
     public HttpStatus deletePostById(@PathVariable int id) {
         posts.delete(posts.findPostById(id));
         return HttpStatus.OK;
+    }
+
+    @GetMapping("user/{id}/posts")
+    public ResponseEntity<List<Post>> getPostsByUserId(@PathVariable int id) {
+        return new ResponseEntity<>(posts.findPostsByUserId(id), HttpStatus.OK);
     }
 
 }
