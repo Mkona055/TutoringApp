@@ -81,6 +81,10 @@ public abstract class Post {
         return tags;
     }
 
+    public void addTag(Tag t) {
+        tags.add(t);
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;

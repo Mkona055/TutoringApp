@@ -1,5 +1,6 @@
 package com.mentorme.controller;
 
+import com.google.gson.Gson;
 import com.mentorme.dao.OfferRepository;
 import com.mentorme.dao.PostRepository;
 import com.mentorme.dao.RequestRepository;
@@ -7,11 +8,15 @@ import com.mentorme.dao.TagRepository;
 import com.mentorme.model.posts.Offer;
 import com.mentorme.model.posts.Post;
 import com.mentorme.model.posts.Request;
+import com.mentorme.model.users.User;
+import jakarta.persistence.JoinColumn;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -110,6 +115,63 @@ public class PostController {
     @GetMapping("user/{id}/posts")
     public ResponseEntity<List<Post>> getPostsByUserId(@PathVariable int id) {
         return new ResponseEntity<>(posts.findPostsByUserId(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/post/{id}/update")
+    public ResponseEntity<Post> updatePostById(@PathVariable int id, @RequestParam Post post) {
+
+        if (id != post.getId()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        posts.deleteById(id);
+        posts.save(post);
+        return new ResponseEntity<>(posts.findPostById(id), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/post/{id}/delete")
+    public ResponseEntity<Post> deletePost(@PathVariable int id) {
+
+        Optional<Post> p = posts.findById(id);
+
+        if (p.isPresent()) {
+            posts.delete(p.get());
+            return new ResponseEntity<>(p.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/newpost")
+    public ResponseEntity<Post> createPost(@RequestBody Map<String,String> body) {
+        String type = body.get("role");
+
+        Post post;
+        if (type.equals("OFFER")) {
+            post = new Offer();
+        } else if (type.equals("REQUEST")) {
+            post = new Request();
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        post.setDescription(
+                body.get("description"));
+        post.setId(
+                Integer.parseInt(body.get("id")));
+        post.setInPerson(
+                Boolean.getBoolean(body.get("inPerson")));
+
+        RestTemplate rt = new RestTemplate();
+        ResponseEntity<User> user = rt.getForEntity("http://localhost:8080/users/user/{id}", User.class, body.get("user_id"));
+        post.setUser( user.getBody() );
+
+        int[] tagIds =  new Gson().fromJson(body.get("tags"), int[].class);
+        for (int tagId : tagIds) {
+            post.addTag(tags.findTagById(tagId));
+        }
+
+        posts.save(post);
+
+        return new ResponseEntity<>(posts.findPostById(post.getId()), HttpStatus.OK);
     }
 
 }
