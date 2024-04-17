@@ -5,6 +5,7 @@ import com.mentorme.dao.OfferRepository;
 import com.mentorme.dao.PostRepository;
 import com.mentorme.dao.RequestRepository;
 import com.mentorme.dao.TagRepository;
+import com.mentorme.model.Tag;
 import com.mentorme.model.posts.Offer;
 import com.mentorme.model.posts.Post;
 import com.mentorme.model.posts.Request;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.session.HttpSessionDestroyedEvent;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -41,6 +43,11 @@ public class PostController {
     @GetMapping("/all")
     public ResponseEntity<List<Post>> getAllPosts() {
         return new ResponseEntity<>(posts.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/tags")
+    public ResponseEntity<List<Tag>> getAllTags() {
+        return new ResponseEntity<>(tags.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/post/{id}")
