@@ -1,10 +1,13 @@
-export const SERVER_BASE_URL="http://localhost:4000";   
+import useAuth from "../hooks/useAuth";
+import { fetchJSONGET } from "./helper";
+
+export const SERVER_BASE_URL="http://localhost:8080/api";
 
 
-export async function fetchPostsWithParams(params){
+export async function fetchPostsWithParams(params, token){
     let res;
     if (params && params.length > 0){
-        res = await fetch(`${SERVER_BASE_URL}/posts?${params}`);
+        res = await fetchJSONGET(`${SERVER_BASE_URL}/posts?${params}`, token);
 
     }else{
         res = await fetch(`${SERVER_BASE_URL}/posts`);
@@ -14,7 +17,7 @@ export async function fetchPostsWithParams(params){
         return data;
     }     
 }
-export async function fetchPostsFrom(userID){
+export async function fetchPostsFrom(userID, token){
     const res = await fetch(`${SERVER_BASE_URL}/posts`);
     if (res.ok){
         const data = await res.json();

@@ -42,11 +42,16 @@ const SignUpLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
       if (isSignUp) {
-        if (filteredOptions.includes(location)) {
+        let locationExists = CANADIAN_CITIES_AND_PROVINCES.some((subArray) => {
+          // Check if every element in 'toCheck' exists in 'subArray'
+          return location.split(", ").every((value, index) => {
+            return subArray[index] === value;
+          });
+        });
+        if (locationExists) {
           // Sign Up
-          await axios.post(`${SERVER_BASE_URL}/users`, {
+          const res = await axios.post(`${SERVER_BASE_URL}/register`, {
             email,
             password,
             role,
@@ -54,24 +59,32 @@ const SignUpLogin = () => {
             lastName,
             location,
           });
-          setError("");
-          navigate("/feed"); 
+          if(res.ok){
+            navigate("/feed"); 
+          }else{
+            setError(res.data.error);
+          }
+
         } else {
           setError("Please choose a location from the list");
         }
       } else {
         // Sign In
-        const response = await axios.get(`${SERVER_BASE_URL}/users`, {
+        const response = await axios.get(`${SERVER_BASE_URL}/authenticate`, {
           email,
           password,
         });
-        const { token } = response.data;
-        login(token);
-        navigate("/feed"); 
+        if (response.ok){
+          const { token } = response.data;
+          login(token);
+          navigate("/feed");
+        }else{
+          setError("Invalid credentials. Please try again.");
+
+        }
+
       }
-    } catch (error) {
-      setError("Invalid credentials. Please try again.");
-    }
+   
   };
 
   return (

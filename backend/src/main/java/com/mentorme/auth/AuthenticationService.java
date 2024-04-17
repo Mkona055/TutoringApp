@@ -54,6 +54,7 @@ public class AuthenticationService {
         var u = repository.save(user);
         Map<String, Object> m = new HashMap<>();
         m.put("userId", u.getId());
+        m.put("role", u.getRole());
         var jwtToken = jwtService.generateToken(m, user);
         return AuthenticationResponse.builder().token(jwtToken).build();
     }

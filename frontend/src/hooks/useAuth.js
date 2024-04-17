@@ -1,23 +1,35 @@
 import { useState } from 'react';
+import jwt_decode from 'jwt-decode';
 
 const useAuth = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [token, setToken] = useState(false);
+  const [authUser, setAuthUser] = useState(false);
 
   const login = (token) => {
     localStorage.setItem('token', token);
-    setLoggedIn(true);
+    setToken(token);
   };
 
   const logout = () => {
     localStorage.removeItem('token');
-    setLoggedIn(false);
+    setToken(null);
   };
 
   const isAuthenticated = () => {
     return localStorage.getItem('token') !== null;
   };
+  const handleDecode = () => {
+    try {
+      const decoded = jwt_decode(jwtToken);
+      setAuthUser(decoded);
+    } catch (error) {
+      console.error('Error decoding token:', error.message);
+      setAuthUser(null);
+    }
+  }
+  
 
-  return { loggedIn, login, logout, isAuthenticated };
+  return { token, login, logout, isAuthenticated };
 };
 
 export default useAuth;
