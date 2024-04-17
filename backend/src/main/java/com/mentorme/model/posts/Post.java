@@ -17,6 +17,9 @@ public abstract class Post {
     protected int id;
 
     @Column
+    protected String title;
+
+    @Column
     protected boolean inPerson;
 
     @Column(name = "post_desc")
