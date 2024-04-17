@@ -34,7 +34,13 @@ export default function Filter({ onFilter, tags }) {
 
   const applyFilters = (e) => {
     e.preventDefault();
-    if (!filteredOptions.includes(location)) {
+    let locationExists = CANADIAN_CITIES_AND_PROVINCES.some((subArray) => {
+      // Check if every element in 'toCheck' exists in 'subArray'
+      return location.split(", ").every((value, index) => {
+        return subArray[index] === value;
+      });
+    });
+    if (!locationExists) {
       setError("Please choose a location from the list");
     }
     const queryString = buildQueryString();
