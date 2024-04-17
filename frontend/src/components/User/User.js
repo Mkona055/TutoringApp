@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { Card, Button, Modal } from 'react-bootstrap';
 import { BsTrash } from 'react-icons/bs';
 
-function User({ user }) {
+function User({ user, onDelete }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleDelete = () => {
-    // Perform delete logic here
-    // For demo, just log the user id
+    onDelete(user.id);
     console.log('Deleting user with ID:', user.id);
 
     // Close the modal after deletion

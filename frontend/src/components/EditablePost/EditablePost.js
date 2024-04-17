@@ -3,6 +3,7 @@ import { Card, Button, Modal, Form } from "react-bootstrap";
 import { BsPencil, BsTrash } from "react-icons/bs";
 import "./EditablePost.css";
 import { CANADIAN_CITIES_AND_PROVINCES } from "../../utils/cities";
+import useAuth from "../../hooks/useAuth";
 
 const EditablePost = ({ post, tags }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -20,6 +21,8 @@ const EditablePost = ({ post, tags }) => {
   const [invalidLocationError, setInvalidLocationError] = useState("");
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const {isAuthenticated, token} = useAuth();
 
   useEffect(() => {
     const filtered = tags.filter((tag) =>
@@ -78,7 +81,6 @@ const EditablePost = ({ post, tags }) => {
   };
 
   const confirmDelete = () => {
-    console.log("Delete Post:", updatedPost);
     setShowDeleteModal(false);
   };
 

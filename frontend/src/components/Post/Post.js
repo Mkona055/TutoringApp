@@ -3,13 +3,13 @@ import { Card, Button, Modal } from 'react-bootstrap';
 import { BsTrash } from 'react-icons/bs';
 import "./Post.css";
 
-const Post = ({ post, hasContactButton=true, allowDelete }) => {
+const Post = ({ post, hasContactButton=true, allowDelete, onDelete}) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleDelete = () => {
     // Perform delete logic here
     // For demo, just log the user id
-    console.log('Deleting post with ID:', post.id);
+    onDelete(post.id)
 
     // Close the modal after deletion
     setShowDeleteModal(false);
@@ -55,11 +55,11 @@ const Post = ({ post, hasContactButton=true, allowDelete }) => {
             </div>
           ))}
         </Card.Text>
-        {post.inPerson && (
+        
           <Card.Text>
-            <strong>Location:</strong> In Person
+            <strong>Location:</strong> {post.inPerson ? "In Person" : "Online"}
           </Card.Text>
-        )}
+        
         <Card.Text className="mt-2">
             <strong>Description:</strong> 
             <p>{post.description}</p>

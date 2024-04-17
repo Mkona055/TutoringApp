@@ -3,18 +3,17 @@ import {Container, Form, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { BsPerson, BsCardList } from "react-icons/bs";
 import { GoSignOut } from "react-icons/go";
-import { useState } from "react";
+import useAuth from "../../hooks/useAuth";
 
 const NavbarComp = ({ onSearch }) => {
   const navigate = useNavigate();
-  const [authUser, setAuthUser] = useState();
-  const role = "ADMIN";
+  const {authUser, logout} = useAuth();
+  const role = authUser.role;
+  console.log(authUser, role)
 
   function handleSignOut() {
-    setAuthUser();
-  }
-  function handleLogin() {
-    navigate("/login");
+    logout();
+    navigate("/");
   }
 
   const [searchParams] = useSearchParams();

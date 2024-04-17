@@ -5,9 +5,9 @@ import "./Filter.css";
 
 export default function Filter({ onFilter, tags }) {
   const [hourlyRate, setHourlyRate] = useState(0);
-  const [location, setLocation] = useState('');
+  const [location, setLocation] = useState("");
   const [filteredOptions, setFilteredOptions] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [criteriasList, setCriteriasList] = useState([]);
   const [tagSearchTerm, setTagSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
@@ -18,14 +18,19 @@ export default function Filter({ onFilter, tags }) {
   const buildQueryString = () => {
     const queryParams = [];
 
-    if (hourlyRate.trim() !== "") {
-      queryParams.push(`hourlyRate=${hourlyRate}`);
+    if (hourlyRate !== "") {
+      queryParams.push(`maxHourlyRate=${hourlyRate}`);
     }
-    if (location.trim() !== "") {
+    if (location !== "") {
       queryParams.push(`location=${location}`);
     }
-    if (tags.length > 0) {
-      const tagsString = tags.map((tag) => tag.trim()).join(",");
+    if (selectedTags.length > 0) {
+      const tagsString = selectedTags
+        .map((tagId) => {
+          const tag = tags.find((t) => t.id === tagId);
+          return tag.name;
+        })
+        .join("&tags=");
       queryParams.push(`tags=${tagsString}`);
     }
 
@@ -34,16 +39,20 @@ export default function Filter({ onFilter, tags }) {
 
   const applyFilters = (e) => {
     e.preventDefault();
-    let locationExists = CANADIAN_CITIES_AND_PROVINCES.some((subArray) => {
-      // Check if every element in 'toCheck' exists in 'subArray'
-      return location.split(", ").every((value, index) => {
-        return subArray[index] === value;
+    if (location) {
+      let locationExists = CANADIAN_CITIES_AND_PROVINCES.some((subArray) => {
+        // Check if every element in 'toCheck' exists in 'subArray'
+        return location.split(", ").every((value, index) => {
+          return subArray[index] === value;
+        });
       });
-    });
-    if (!locationExists) {
-      setError("Please choose a location from the list");
+      if (!locationExists) {
+        setError("Please choose a location from the list");
+      }
     }
+
     const queryString = buildQueryString();
+    console.log(queryString);
     onFilter(queryString);
   };
 
@@ -79,20 +88,20 @@ export default function Filter({ onFilter, tags }) {
   useEffect(() => {
     const list = [];
     if (hourlyRate) {
-        list.push("Hourly rate <= " + hourlyRate + "$");
+      list.push("Hourly rate <= " + hourlyRate + "$");
     }
-    if (location){
-        list.push("Location: " + location);
+    if (location) {
+      list.push("Location: " + location);
     }
-    if (selectedTags.length > 0){
-        selectedTags.map((tagId) =>{
-            const tag = tags.find((t) => t.id === tagId)
-            list.push(tag.name);
-            return true;
-        });
+    if (selectedTags.length > 0) {
+      selectedTags.map((tagId) => {
+        const tag = tags.find((t) => t.id === tagId);
+        list.push(tag.name);
+        return true;
+      });
     }
     setCriteriasList(list);
-}, [hourlyRate, location, selectedTags, tags]);
+  }, [hourlyRate, location, selectedTags, tags]);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -113,46 +122,55 @@ export default function Filter({ onFilter, tags }) {
       setCriteriasList([...criteriasList, tag.name]);
     } else {
       setSelectedTags(selectedTags.filter((t) => t !== tag.id));
-      setCriteriasList(criteriasList.filter((criteria) => {
-        return criteria !== tag.name;
-      }));
+      setCriteriasList(
+        criteriasList.filter((criteria) => {
+          return criteria !== tag.name;
+        })
+      );
     }
-
   };
-   /**
-     * The role of this function is to convert the criteria text into a blue label to be displayed in
-     * the filter in the user selected criterias section
-     * @param {String} criteria 
-     * @returns JSX element
-     */
-   const getCriteriaJSXElement = (criteria) => {
-    return              <span key={criteria} className="criteria small rounded text-white me-1 ps-2 pe-2 pt-1 pb-1">
-                            <span>{criteria}</span>
-                            <i className="ms-2 bi bi-x-lg" onClick={removeCriteria}></i>
-                        </span>;
-
-}
-/**
- * This function is used to remove a criteria from the criterias list
- * @param {Event} e 
- */
-const removeCriteria = (e) => {
+  /**
+   * The role of this function is to convert the criteria text into a blue label to be displayed in
+   * the filter in the user selected criterias section
+   * @param {String} criteria
+   * @returns JSX element
+   */
+  const getCriteriaJSXElement = (criteria) => {
+    return (
+      <span
+        key={criteria}
+        className="criteria small rounded text-white me-1 ps-2 pe-2 pt-1 pb-1"
+      >
+        <span>{criteria}</span>
+        <i className="ms-2 bi bi-x-lg" onClick={removeCriteria}></i>
+      </span>
+    );
+  };
+  /**
+   * This function is used to remove a criteria from the criterias list
+   * @param {Event} e
+   */
+  const removeCriteria = (e) => {
     const criteriaName = e.target.parentElement.innerText;
 
-    if (criteriaName.includes("Hourly rate")){
-        setHourlyRate(0);
-    }else if (criteriaName.includes("Location")){
-        setLocation('');
-    }else{
-        setSelectedTags(selectedTags.filter((tagId) =>{
-            const tag = tags.find((t) => t.name === criteriaName)
-            return tagId !== tag.id;
-        }));
-    } 
-    setCriteriasList(criteriasList.filter((criteria) => {
+    if (criteriaName.includes("Hourly rate")) {
+      setHourlyRate(0);
+    } else if (criteriaName.includes("Location")) {
+      setLocation("");
+    } else {
+      setSelectedTags(
+        selectedTags.filter((tagId) => {
+          const tag = tags.find((t) => t.name === criteriaName);
+          return tagId !== tag.id;
+        })
+      );
+    }
+    setCriteriasList(
+      criteriasList.filter((criteria) => {
         return criteria !== criteriaName;
-    }));
-}
+      })
+    );
+  };
 
   return (
     <Container
@@ -233,7 +251,6 @@ const removeCriteria = (e) => {
                       </div>
                     ))}
                     <div className="tag-selector-footer">
-                      
                       <button
                         className="btn btn-secondary mt-2 mb-2"
                         onClick={toggleDropdown}
@@ -259,14 +276,16 @@ const removeCriteria = (e) => {
           </div>
         </div>
       </Form>
-      {criteriasList.length !== 0  && <div className=" d-flex row justify-content-center mt-2 mb-2 border-top">
-                <div className="col" id="criterias">
-                    <span className="d-block small mb-1">Your criterias:</span>
-                    {criteriasList.map((criteria, index) => {
-                        return getCriteriaJSXElement(criteria)
-                    })}                  
-                </div>
-            </div>}
+      {criteriasList.length !== 0 && (
+        <div className=" d-flex row justify-content-center mt-2 mb-2 border-top">
+          <div className="col" id="criterias">
+            <span className="d-block small mb-1">Your criterias:</span>
+            {criteriasList.map((criteria, index) => {
+              return getCriteriaJSXElement(criteria);
+            })}
+          </div>
+        </div>
+      )}
     </Container>
   );
 }

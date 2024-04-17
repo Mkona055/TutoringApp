@@ -3,7 +3,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 //import {getAuthUserId, getJwtToken} from "../../utils"
 export default function PostList({ posts }) {
-    posts.map((post) => (console.log(post)))
+    posts.map((post) => (console.log(posts)))
     return (
         <div data-testid="post-list">
             <Row

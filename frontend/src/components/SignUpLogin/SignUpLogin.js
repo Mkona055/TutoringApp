@@ -1,7 +1,6 @@
 import "./SignUpLogin.css";
 import useAuth from "../../hooks/useAuth";
-import axios from "axios";
-import { SERVER_BASE_URL } from "../../utils/api";
+import { loginUser, registerUser } from "../../utils/api";
 import React, { useState } from "react";
 import { CANADIAN_CITIES_AND_PROVINCES } from "../../utils/cities";
 import { useNavigate } from "react-router-dom";
@@ -51,7 +50,7 @@ const SignUpLogin = () => {
         });
         if (locationExists) {
           // Sign Up
-          const res = await axios.post(`${SERVER_BASE_URL}/register`, {
+          const res = await registerUser({
             email,
             password,
             role,
@@ -59,10 +58,11 @@ const SignUpLogin = () => {
             lastName,
             location,
           });
-          if(res.ok){
+          if(res && res.token){
+            login(res.token);
             navigate("/feed"); 
           }else{
-            setError(res.data.error);
+            setError("An error occured while registering");
           }
 
         } else {
@@ -70,13 +70,12 @@ const SignUpLogin = () => {
         }
       } else {
         // Sign In
-        const response = await axios.get(`${SERVER_BASE_URL}/authenticate`, {
+        const res = await loginUser( {
           email,
           password,
         });
-        if (response.ok){
-          const { token } = response.data;
-          login(token);
+        if (res && res.token){
+          login(res.token);
           navigate("/feed");
         }else{
           setError("Invalid credentials. Please try again.");
