@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -16,5 +17,9 @@ public interface OfferRepository extends JpaRepository<Offer, Integer> {
 
     List<Offer> findOffersByTags_Name(String Name);
 
-    List<Post> findOffersByTags_NameIn(List<String> tags);
+    List<Offer> findOffersByTags_NameIn(List<String> tags);
+
+    List<Offer> findOffersByHourlyRateIsLessThanEqual(Double maxHourlyRate);
+
+    List<Offer> findOffersByUser_Location(String location);
 }

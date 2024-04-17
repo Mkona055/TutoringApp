@@ -1,9 +1,7 @@
 package com.mentorme.dao;
 
-import com.mentorme.model.posts.Offer;
 import com.mentorme.model.posts.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,7 +17,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     List<Post> findPostsByHourlyRateIsLessThanEqual(double rate);
 
-    List<Post> findPostByUser_Location(String location);
+    List<Post> findPostsByUser_Location(String location);
 
 
 //    List<Post> findPostByFilter(List<String> tags, double rate, String location);
