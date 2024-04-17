@@ -5,6 +5,14 @@ import jakarta.persistence.*;
 @Entity
 @DiscriminatorValue(value = "TUTOR")
 public class Tutor extends User {
+    public Tutor() {
+        super();
+        role = "TUTOR";
+    }
+//    public Tutor() {
+//        super();
+//        this.role = "TUTOR";
+//    }
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    @Column(name = "id", nullable = false)
@@ -33,4 +41,15 @@ public class Tutor extends User {
 //        this.user = user;
 //    }
 
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Tutor)) return false;
+        return super.equals(object);
+    }
 }

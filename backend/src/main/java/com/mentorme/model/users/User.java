@@ -2,6 +2,7 @@ package com.mentorme.model.users;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,7 +16,7 @@ import jakarta.persistence.*;
 public abstract class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;
 
     @Column(name = "location")
@@ -36,7 +37,8 @@ public abstract class User implements UserDetails {
     @Column(name = "role", insertable = false, updatable = false)
     protected String role;
 
-    public User() {}
+    public User() {
+    }
 
     public int getId() {
         return id;
@@ -78,49 +80,69 @@ public abstract class User implements UserDetails {
         this.passwordHash = passwordHash;
     }
 
-    public void setRole(String role){
+    public void setRole(String role) {
         this.role = role;
     }
 
-   public String getRole() {
-       return role;
-   }
+    public String getRole() {
+        return role;
+    }
 
-   public String getLocation() {
-    return location;
-}
+    public String getLocation() {
+        return location;
+    }
 
-public void setLocation(String location) {
-    this.location = location;
-}
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
-public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority(role));
-}
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role));
+    }
 
-public String getUsername() {
-    return email;
-}
+    public String getUsername() {
+        return email;
+    }
 
-public boolean isAccountNonExpired() {
-    return true;
-}
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-public boolean isAccountNonLocked(){
-    return true;
-}
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
-public boolean isCredentialsNonExpired() {
-    return true;
-}
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
-public boolean isEnabled() {
-    return true;
-}
+    public boolean isEnabled() {
+        return true;
+    }
 
-public String getPassword(){
-    return passwordHash;
-}
+    public String getPassword() {
+        return passwordHash;
+    }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        User user = (User) object;
+        return id == user.id
+                && Objects.equals(location, user.location)
+                && Objects.equals(firstName, user.firstName)
+                && Objects.equals(lastName, user.lastName)
+                && Objects.equals(email, user.email)
+                && Objects.equals(passwordHash, user.passwordHash);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, location, firstName, lastName, email, passwordHash, role);
+    }
+
+//    public abstract boolean equals(Object object);
+//
+//    public abstract int hashCode();
 }
