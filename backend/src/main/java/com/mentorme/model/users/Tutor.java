@@ -3,7 +3,7 @@ package com.mentorme.model.users;
 import jakarta.persistence.*;
 
 @Entity
-@DiscriminatorValue(value = "TUTOR")
+@DiscriminatorValue("TUTOR")
 public class Tutor extends User {
     public Tutor() {
         super();

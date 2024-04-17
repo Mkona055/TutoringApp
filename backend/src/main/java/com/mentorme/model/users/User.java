@@ -8,6 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.mentorme.model.posts.Post;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -17,7 +19,7 @@ public abstract class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected int id;
+    public int id;
 
     @Column(name = "location")
     protected String location;
@@ -36,6 +38,9 @@ public abstract class User implements UserDetails {
 
     @Column(name = "role", insertable = false, updatable = false)
     protected String role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    protected List<Post> posts;
 
     public User() {
     }
