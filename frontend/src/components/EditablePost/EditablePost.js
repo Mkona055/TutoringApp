@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Card, Button, Modal, Form } from "react-bootstrap";
 import { BsPencil, BsTrash } from "react-icons/bs";
 import "./EditablePost.css";
-import { CANADIAN_CITIES_AND_PROVINCES } from "../../utils/cities";
-import useAuth from "../../hooks/useAuth";
 
-const EditablePost = ({ post, tags }) => {
+const EditablePost = ({ post, tags, onDelete, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedPost, setUpdatedPost] = useState(post);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -17,12 +15,9 @@ const EditablePost = ({ post, tags }) => {
 
   // State for location selector
   const [location, setLocation] = useState(post.location);
-  const [filteredOptions, setFilteredOptions] = useState([]);
-  const [invalidLocationError, setInvalidLocationError] = useState("");
+
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const {isAuthenticated, token} = useAuth();
 
   useEffect(() => {
     const filtered = tags.filter((tag) =>
@@ -36,10 +31,6 @@ const EditablePost = ({ post, tags }) => {
     setSelectedTags(allTagIds);
   }, [post.tags]);
 
-  useEffect(() => {
-    const allTagIds = post.tags.map((tag) => tag.id);
-    setSelectedTags(allTagIds);
-  }, [post.tags]);
 
   useEffect(() => {
     const tagsSelected = selectedTags.map((tag) => {
@@ -58,25 +49,18 @@ const EditablePost = ({ post, tags }) => {
   }, [selectedTags, location, tags]);
 
   const handleEdit = () => {
+    // onUpdate(updatedPost);    YOOOOO REVERTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+    console.log('Edit', updatedPost)
     setIsEditing(true);
   };
 
   const handleSaveChanges = () => {
-    let locationExists = CANADIAN_CITIES_AND_PROVINCES.some((subArray) => {
-      // Check if every element in 'toCheck' exists in 'subArray'
-      return location.split(", ").every((value, index) => {
-        return subArray[index] === value;
-      });
-    });
-    if (!locationExists) {
-      setInvalidLocationError("Please choose a location from the list");
-    } else {
-      console.log("Updated Post:", updatedPost);
-      setIsEditing(false);
-    }
+    console.log("Updated Post:", updatedPost);
+    setIsEditing(false);
   };
 
   const handleDelete = () => {
+    onDelete(post.id);
     setShowDeleteModal(true);
   };
 
@@ -107,20 +91,6 @@ const EditablePost = ({ post, tags }) => {
     } else {
       setSelectedTags([...selectedTags, tagId]);
     }
-  };
-  const handleLocationSearchChange = (event) => {
-    const { value } = event.target;
-    setLocation(value);
-
-    // Debounce the filtering function
-    setTimeout(() => {
-      const filtered = CANADIAN_CITIES_AND_PROVINCES.filter(
-        ([city, province]) =>
-          city.toLowerCase().includes(value.toLowerCase()) ||
-          province.toLowerCase().includes(value.toLowerCase())
-      );
-      setFilteredOptions(filtered);
-    }, 300); // 300ms debounce delay
   };
 
   return (
@@ -237,26 +207,21 @@ const EditablePost = ({ post, tags }) => {
             <Form.Label>
               <strong>Location:</strong>
             </Form.Label>
-            <Form.Control
-              className={`${invalidLocationError ? "is-invalid" : ""}`}
-              list="locationDetails"
-              placeholder="Enter location"
+            <select
+              className="form-control"
+              id="location"
               value={location}
-              onChange={handleLocationSearchChange}
-            />
-            <datalist id="locationDetails">
-              {filteredOptions.map(([city, province]) => (
-                <option
-                  key={`${city}-${province}`}
-                  value={`${city}, ${province}`}
-                />
-              ))}
-            </datalist>
-            {invalidLocationError && (
-              <Form.Control.Feedback type="invalid">
-                {invalidLocationError}
-              </Form.Control.Feedback>
-            )}
+              onChange={(e) =>
+                setLocation(e.target.value === "inPerson" ? true : false)
+              }
+              required
+            >
+              <option value="" disabled>
+                Select a location
+              </option>
+              <option value="inPerson">In person</option>
+              <option value="online">Online</option>
+            </select>
           </Form.Group>
         ) : (
           <Card.Text>

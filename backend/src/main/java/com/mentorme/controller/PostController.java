@@ -1,19 +1,16 @@
 package com.mentorme.controller;
 
 import com.google.gson.Gson;
-import com.mentorme.dao.OfferRepository;
-import com.mentorme.dao.PostRepository;
-import com.mentorme.dao.RequestRepository;
-import com.mentorme.dao.TagRepository;
+import com.mentorme.dao.*;
 import com.mentorme.model.Tag;
 import com.mentorme.model.posts.Offer;
 import com.mentorme.model.posts.Post;
+import com.mentorme.model.posts.PostCreateDto;
 import com.mentorme.model.posts.Request;
 import com.mentorme.model.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.session.HttpSessionDestroyedEvent;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,17 +21,23 @@ import java.util.*;
 @CrossOrigin
 public class PostController {
 
+    private final UserRepository users;
     private final RequestRepository requests;
     private final OfferRepository offers;
     private final PostRepository posts;
     private final TagRepository tags;
 
     @Autowired
-    public PostController(RequestRepository requests, OfferRepository offers, PostRepository posts, TagRepository tags) {
+    public PostController(RequestRepository requests,
+                          OfferRepository offers,
+                          PostRepository posts,
+                          TagRepository tags,
+                          UserRepository users) {
         this.requests = requests;
         this.offers = offers;
         this.posts = posts;
         this.tags = tags;
+        this.users = users;
     }
 
     @GetMapping("/all")
@@ -179,37 +182,37 @@ public class PostController {
     }
 
     @PostMapping("/newpost")
-    public ResponseEntity<Post> createPost(@RequestBody Map<String,String> body) {
-        String type = body.get("role");
+    public ResponseEntity<Post> createPost(@RequestBody PostCreateDto body) {
+        // Create a new Post object from the DTO
+        Post newPost = body.getUserRole().equals("STUDENT") ? new Request() : new Offer();
+        newPost.setDescription(body.getDescription());
+        newPost.setInPerson(body.isInPerson());
+        newPost.setHourlyRate(body.getHourlyRate());
 
-        Post post;
-        if (type.equals("OFFER")) {
-            post = new Offer();
-        } else if (type.equals("REQUEST")) {
-            post = new Request();
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        // Fetch user by user ID from the database
+        Optional<User> user = users.findById(body.getUserId());
+        user.ifPresent(newPost::setUser);
+        if (user.isEmpty()) {
+            // Handle user not found error
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        post.setDescription(
-                body.get("description"));
-        post.setId(
-                Integer.parseInt(body.get("id")));
-        post.setInPerson(
-                Boolean.getBoolean(body.get("inPerson")));
-
-        RestTemplate rt = new RestTemplate();
-        ResponseEntity<User> user = rt.getForEntity("http://localhost:8080/users/user/{id}", User.class, body.get("user_id"));
-        post.setUser( user.getBody() );
-
-        int[] tagIds =  new Gson().fromJson(body.get("tags"), int[].class);
-        for (int tagId : tagIds) {
-            post.addTag(tags.findTagById(tagId));
+        // Set tags to the post
+        for (int tagId : body.getTags()) {
+            Tag tag = tags.findTagById(tagId);
+            if (tag != null) {
+                newPost.addTag(tag);
+            } else {
+                // Handle tag not found error
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         }
 
-        posts.save(post);
+        // Save the new post
+        Post savedPost = posts.save(newPost);
 
-        return new ResponseEntity<>(posts.findPostById(post.getId()), HttpStatus.OK);
+        // Return the saved post
+        return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
     }
 
 }

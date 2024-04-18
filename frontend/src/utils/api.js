@@ -94,3 +94,17 @@ export async function deletePostById(postId, token) {
         return false;
     }
 }
+
+export async function updatePost(body, token) {
+}
+
+export async function createPost(body, token) {
+    body = JSON.stringify(body);
+    const res = await fetchJSONPOST(`${SERVER_BASE_URL}/feed/newpost`, body, token);
+    if (res.ok){
+        const data = await res.json();        
+        console.log(data);
+
+        return data;
+    }
+}
