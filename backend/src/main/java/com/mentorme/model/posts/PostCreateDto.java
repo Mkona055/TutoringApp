@@ -2,6 +2,7 @@ package com.mentorme.model.posts;
 
 public class PostCreateDto {
     private String userRole;
+    private String title;
     private String description;
     private boolean inPerson;
     private Integer userId;
@@ -14,6 +15,14 @@ public class PostCreateDto {
 
     public void setUserRole(String userRole) {
         this.userRole = userRole;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {

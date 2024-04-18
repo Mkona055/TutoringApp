@@ -159,12 +159,34 @@ public class PostController {
     }
 
     @PutMapping("/post/{id}/update")
-    public ResponseEntity<Post> updatePostById(@PathVariable int id, @RequestParam Post post) {
+    public ResponseEntity<Post> updatePostById(@PathVariable int id, @RequestBody Map<String,String> postFields) {
 
-        if (id != post.getId()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (id != Integer.parseInt(postFields.get("id"))) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        posts.deleteById(id);
-        posts.save(post);
+        Post postToBeUpdated = posts.findById(id).orElse(null);
+        if (postToBeUpdated == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        //UPDATES TITLE, DESCRIPTION, HOURLY RATE, IN PERSON, TAGS (RESETS TAGS)
+        postToBeUpdated.setTitle(       postFields.get("title"));
+        postToBeUpdated.setDescription( postFields.get("description"));
+        postToBeUpdated.setHourlyRate(  Double.valueOf(postFields.get("hourlyRate")));
+        postToBeUpdated.setInPerson(    Boolean.parseBoolean(postFields.get("inPerson")));
+
+        // Tags of String format "1,2,3" with relevant ids
+        String[] tagStrings = postFields.get("tags").split(",");
+        postToBeUpdated.setTags(new HashSet<>());
+        for (String tagId : tagStrings) {
+            Tag tag = tags.findTagById(Integer.parseInt(tagId));
+            if (tag != null) {
+                postToBeUpdated.addTag(tag);
+            } else {
+                // Handle tag not found error
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+
+        posts.save(postToBeUpdated);
+
         return new ResponseEntity<>(posts.findPostById(id), HttpStatus.OK);
     }
 
@@ -185,6 +207,7 @@ public class PostController {
     public ResponseEntity<Post> createPost(@RequestBody PostCreateDto body) {
         // Create a new Post object from the DTO
         Post newPost = body.getUserRole().equals("STUDENT") ? new Request() : new Offer();
+        newPost.setTitle(body.getTitle());
         newPost.setDescription(body.getDescription());
         newPost.setInPerson(body.isInPerson());
         newPost.setHourlyRate(body.getHourlyRate());

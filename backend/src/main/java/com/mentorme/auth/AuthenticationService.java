@@ -55,6 +55,7 @@ public class AuthenticationService {
         Map<String, Object> m = new HashMap<>();
         m.put("userId", u.getId());
         m.put("role", u.getRole());
+        m.put("location", u.getLocation());
         var jwtToken = jwtService.generateToken(m, user);
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
@@ -65,6 +66,7 @@ public class AuthenticationService {
         Map<String, Object> m = new HashMap<>();
         m.put("userId", u.getId());
         m.put("role", u.getRole());
+        m.put("location", u.getLocation());
         var jwtToken = jwtService.generateToken(m, u);
         return AuthenticationResponse.builder().token(jwtToken).build();
     }

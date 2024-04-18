@@ -85,6 +85,9 @@ public abstract class Post {
     public Set<Tag> getTags() {
         return tags;
     }
+    public void setTags(Set<Tag> set){
+        this.tags = set;
+    }
 
     public void addTag(Tag t) {
         if (tags == null){
