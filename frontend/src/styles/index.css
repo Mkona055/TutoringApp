@@ -18,3 +18,7 @@ code {
     monospace;
 }
 
+.spinner-border{
+  color:var(--team-purple)!important;
+}
+
