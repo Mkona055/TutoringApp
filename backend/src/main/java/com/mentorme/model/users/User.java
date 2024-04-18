@@ -20,6 +20,7 @@ public abstract class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
+    //TODO check this^
 
     @Column(name = "location")
     protected String location;
