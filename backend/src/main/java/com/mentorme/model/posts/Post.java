@@ -30,7 +30,7 @@ public abstract class Post {
     @Column
     protected Double hourlyRate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     protected User user;
 
