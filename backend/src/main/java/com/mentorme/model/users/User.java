@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import com.mentorme.model.posts.Post;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,6 +37,10 @@ public abstract class User implements UserDetails {
 
     @Column(name = "role", insertable = false, updatable = false)
     protected String role;
+
+//    // CASCADE WILL PROBABLY NEED THIS
+//    @OneToMany(mappedBy = "id")
+//    protected List<Post> posts;
 
     public User() {
     }

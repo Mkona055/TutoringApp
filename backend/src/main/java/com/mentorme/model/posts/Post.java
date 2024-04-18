@@ -3,7 +3,10 @@ package com.mentorme.model.posts;
 import com.mentorme.model.Tag;
 import com.mentorme.model.users.User;
 import jakarta.persistence.*;
+import lombok.Setter;
+import org.springframework.lang.NonNull;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,6 +17,7 @@ public abstract class Post {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     protected int id;
 
     @Column
@@ -23,26 +27,27 @@ public abstract class Post {
     protected String description;
 
     @Column
+    protected String title;
+
+    @Column
     protected Double hourlyRate;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     protected User user;
 
     @ManyToMany
     @JoinTable(name = "post_tag",
             joinColumns = {@JoinColumn(name = "post_id")},
             inverseJoinColumns = {@JoinColumn(name = "tag_id")})
-    protected Set<Tag> tags;
+    protected Set<Tag> tags = new HashSet<>();
 
     public Post() {}
-
-    public int getId() {
-        return id;
-    }
-
     public void setId(int id) {
         this.id = id;
+    }
+    public int getId() {
+        return id;
     }
 
     public boolean isInPerson() {
@@ -83,6 +88,14 @@ public abstract class Post {
 
     public void addTag(Tag t) {
         tags.add(t);
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override
