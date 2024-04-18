@@ -3,8 +3,6 @@ package com.mentorme.model.posts;
 import com.mentorme.model.Tag;
 import com.mentorme.model.users.User;
 import jakarta.persistence.*;
-import lombok.Setter;
-import org.springframework.lang.NonNull;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -21,18 +19,18 @@ public abstract class Post {
     protected int id;
 
     @Column
+    protected String title;
+
+    @Column
     protected boolean inPerson;
 
     @Column(name = "post_desc")
     protected String description;
 
     @Column
-    protected String title;
-
-    @Column
     protected Double hourlyRate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     protected User user;
 
@@ -43,11 +41,13 @@ public abstract class Post {
     protected Set<Tag> tags = new HashSet<>();
 
     public Post() {}
-    public void setId(int id) {
-        this.id = id;
-    }
+
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public boolean isInPerson() {

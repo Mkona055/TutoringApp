@@ -61,8 +61,11 @@ public class AuthenticationService {
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        var user = repository.findByEmail(request.getEmail()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        var u = repository.findByEmail(request.getEmail()).orElseThrow();
+        Map<String, Object> m = new HashMap<>();
+        m.put("userId", u.getId());
+        m.put("role", u.getRole());
+        var jwtToken = jwtService.generateToken(m, u);
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 

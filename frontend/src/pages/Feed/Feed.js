@@ -16,7 +16,7 @@ function Feed() {
   const [posts, setPosts] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, token, authUser } = useAuth();
 
   function handleFilterSelection(params) {
     setParams(params);
@@ -24,11 +24,11 @@ function Feed() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      fetchTags().then((tags) => {
+      fetchTags(token).then((tags) => {
         setTags(tags);
       });
 
-      fetchPostsWithParams(params).then(
+      fetchPostsWithParams(params, token, authUser.role).then(
         (result) => {
           setPosts(result);
           setIsLoaded(true);
@@ -39,7 +39,8 @@ function Feed() {
         }
       );
     }
-  }, [isAuthenticated, params]);
+    // eslint-disable-next-line
+  }, [params]);
 
   if (!isAuthenticated) {
     return <Navigate to="/" />;

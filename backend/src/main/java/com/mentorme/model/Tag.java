@@ -10,10 +10,10 @@ public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    protected Integer id;
 
     @Column(name = "name")
-    private String name;
+    protected String name;
 
     public Integer getId() {
         return id;
