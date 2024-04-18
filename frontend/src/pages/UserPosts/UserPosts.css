@@ -2,3 +2,8 @@
     background-color: var(--team-purple) !important;
     color: white !important;
 }
+.form-check-input:checked{
+    background-color: var(--team-purple) !important;
+    border: 1px solid var(--team-purple) !important;
+    color: white !important;
+}

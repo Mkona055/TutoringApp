@@ -9,7 +9,6 @@ const NavbarComp = ({ onSearch }) => {
   const navigate = useNavigate();
   const {authUser, logout} = useAuth();
   const role = authUser.role;
-  console.log(authUser, role)
 
   function handleSignOut() {
     logout();
