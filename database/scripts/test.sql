@@ -48,10 +48,14 @@ VALUES (1, 'Swords'),
        (2, 'Horses');
 
 INSERT INTO user (id, location, f_name, l_name, email, password, role)
-VALUES (1, 'Rohan', 'Took', 'Peregrin', 'second.breakfast@gmail.com', 'wigs', 'STUDENT');
+VALUES
+    (1, 'Rohan', 'Took', 'Peregrin', 'second.breakfast@gmail.com', 'wigs', 'STUDENT'),
+    (2, 'Gondor', 'Merry', 'Mayweather', 'doesnt.know@gmail.com', 'whenwigs', 'TUTOR');
+
 
 INSERT INTO post (id, title, in_person, post_desc, user_id, hourly_rate, type)
-VALUES (1, 'Beacons have been lit', 1, 'Gondor calls for aid', 1, 10.0, 'REQUEST');
+VALUES (1, 'Beacons have been lit', 1, 'Gondor calls for aid', 1, 10.0, 'REQUEST'),
+       (2, 'And Rohan shall answer', 1, 'yippee', 2,50.0,'OFFER');
 
 INSERT INTO post_tag (tag_id, post_id) VALUES (1,1), (2,1);
 
