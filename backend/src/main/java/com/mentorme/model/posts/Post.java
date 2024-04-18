@@ -87,6 +87,9 @@ public abstract class Post {
     }
 
     public void addTag(Tag t) {
+        if (tags == null){
+            tags = new HashSet<>();
+        }
         tags.add(t);
     }
 

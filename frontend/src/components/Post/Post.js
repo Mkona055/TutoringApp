@@ -57,7 +57,7 @@ const Post = ({ post, hasContactButton=true, allowDelete, onDelete}) => {
         </Card.Text>
         
           <Card.Text>
-            <strong>Location:</strong> {post.inPerson ? "In Person" : "Online"}
+            <strong>Location {post.inPerson ? `(${post.user.location})` : ""}:</strong> {post.inPerson ? "In Person" : "Online"}
           </Card.Text>
         
         <Card.Text className="mt-2">

@@ -48,25 +48,29 @@ const SignUpLogin = () => {
             return subArray[index] === value;
           });
         });
-        if (locationExists) {
-          // Sign Up
-          const res = await registerUser({
-            email,
-            password,
-            role,
-            firstName,
-            lastName,
-            location,
-          });
-          if(res && res.token){
-            login(res.token);
-            navigate("/feed"); 
-          }else{
-            setError("An error occured while registering");
-          }
-
-        } else {
+        if (!locationExists) {
           setError("Please choose a location from the list");
+          return null;
+        } 
+
+        if (password.length < 16) {
+          setError("Password must be at least 16 characters long");
+          return null;
+        }
+
+        const res = await registerUser({
+          email,
+          password,
+          role,
+          firstName,
+          lastName,
+          location,
+        });
+        if(res && res.token){
+          login(res.token);
+          navigate("/feed"); 
+        }else{
+          setError("An error occured while registering");
         }
       } else {
         // Sign In
