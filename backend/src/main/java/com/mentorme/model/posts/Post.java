@@ -3,6 +3,8 @@ package com.mentorme.model.posts;
 import com.mentorme.model.Tag;
 import com.mentorme.model.users.User;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -30,7 +32,7 @@ public abstract class Post {
     @Column
     protected Double hourlyRate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER) // was getting lazy error
     @JoinColumn(name = "user_id", nullable = false)
     protected User user;
 
@@ -95,6 +97,10 @@ public abstract class Post {
 
     public String getTitle() {
         return title;
+    }
+
+    public void setTags(Set<Tag> newTags) {
+        tags = newTags;
     }
 
     public void setTitle(String title) {
