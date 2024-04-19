@@ -1,5 +1,4 @@
 export const CANADIAN_CITIES_AND_PROVINCES = [
-    ["ONLINE", "MEETING"],
     ["100 MILE HOUSE", "BC"],
     ["108 MILE RANCH", "BC"],
     ["150 MILE HOUSE", "BC"],

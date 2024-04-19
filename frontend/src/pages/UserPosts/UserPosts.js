@@ -1,7 +1,7 @@
 import "./UserPosts.css"
 import { useEffect, useState } from "react";
-import { fetchPostsFromUser, fetchTags, createPost, deletePostById, updatePost } from "../../utils/api"; // Assuming you have a createPost function in your API
-import { Spinner, Button, Modal, Form, Alert } from "react-bootstrap";
+import { fetchPostsFromUser, fetchTags, createPost, deletePostById, updatePostById } from "../../utils/api"; // Assuming you have a createPost function in your API
+import { Spinner, Button, Modal, Form, Alert, FormControl } from "react-bootstrap";
 import Footer from "../../components/Footer/Footer";
 import NavbarComp from "../../components/NavbarComp/NavbarComp";
 import EditablePostList from "../../components/EditablePostList/EditablePostList";
@@ -28,6 +28,7 @@ function UserPosts() {
  const [filteredTags, setFilteredTags] = useState([]);
 
  const [dropdownOpen, setDropdownOpen] = useState(false);
+ const [ hasTags, setHasTags] = useState(true);
 
   const handleCloseSuccessAlert = () => {
     setShowSuccessAlert(false);
@@ -36,6 +37,12 @@ function UserPosts() {
   const handleCloseErrorAlert = () => {
     setShowErrorAlert(false);
   };
+
+  
+  useEffect(() => {
+    
+    // eslint-disable-next-line
+  }, [selectedTags]);
 
   useEffect(() => {
     const filtered = tags.filter((tag) =>
@@ -52,6 +59,7 @@ function UserPosts() {
 
       fetchPostsFromUser(authUser.userId, token).then(
         (result) => {
+          console.log(result);
           setPosts(result);
           setIsLoaded(true);
         },
@@ -86,17 +94,23 @@ function UserPosts() {
   };
 
   const handleTagSelection = (tag) => {
-    const tagName = tag.name;
-    if (selectedTags.includes(tagName)) {
-      setSelectedTags(selectedTags.filter((name) => name !== tagName));
+    const tagId = tag.id;
+    if (selectedTags.includes(tagId)) {
+      setSelectedTags(selectedTags.filter((id) => id !== tagId));
     } else {
-      setSelectedTags([...selectedTags, tagName]);
+      setSelectedTags([...selectedTags, tagId]);
     }
   };
 
   const handleDeletePost = async (postId) => {
     try{
-      await deletePostById(postId, token);
+      const response = await deletePostById(postId, token);
+      if (response){
+        setPosts(posts.filter((post) => post.id!== postId));
+      }else{
+        console.error("Error deleting post:", error);
+        setShowErrorAlert(true);
+      }
     }catch (error) {
       console.error("Error deleting post:", error);
       setShowErrorAlert(true);
@@ -106,8 +120,17 @@ function UserPosts() {
   const handleUpdatePost = async (updatedPost) => {
 
     try {
-      await updatePost(updatedPost,token);
-      setShowSuccessAlert(true);
+      updatedPost.user = null;
+      const editedPost = await updatePostById(updatedPost.id, updatedPost,token);
+      if (editedPost){
+        setPosts(posts.map((post) => (post.id === editedPost.id? editedPost : post)));
+        setShowSuccessAlert(true);
+
+      }else{
+        console.error("Error updating post:", error);
+        setShowErrorAlert(true);
+      }
+
     } catch (error) {
       console.error("Error creating post:", error);
       setShowErrorAlert(true);
@@ -117,22 +140,31 @@ function UserPosts() {
   const handleCreatePost = async (e) => {
     e.preventDefault();
 
+    if (selectedTags.length > 0) {
+      setHasTags(true);
+    }else{
+      setHasTags(false);
+      return;
+    }
     try {
       const newPost = await createPost({
         title: postTitle,
         description: postDescription,
         inPerson: postInPerson,
         hourlyRate: postHourlyRate,
-        user_id: authUser.userId,
-        role: authUser.role
+        userId: authUser.userId,
+        userRole: authUser.role, 
+        tags: selectedTags
       }, token);
       if (newPost){
         setPosts([...posts, newPost]);
         setShowSuccessAlert(true);
+
       }else{
         setShowErrorAlert(true);
 
       }
+      setShowModal(false);
 
       // Add new post to the existing list of posts
      
@@ -155,7 +187,7 @@ function UserPosts() {
           className="d-flex justify-content-center align-items-center"
           style={{ height: "100vh" }}
         >
-          <Spinner animation="border" variant="danger" />
+          <Spinner animation="border" />
         </div>
       </>
     );
@@ -164,7 +196,9 @@ function UserPosts() {
       <>
         <NavbarComp />
         <PageTitle title={"My posts"} />
-        <Alert
+        <div className="container mt-3 d-flex justify-content-center ">
+          <div className="w-50">
+             <Alert
           show={showSuccessAlert}
           variant="success"
           onClose={handleCloseSuccessAlert}
@@ -180,12 +214,16 @@ function UserPosts() {
         >
           <p>An error occurred while saving your changes</p>
         </Alert>
+          </div>
+         
+        </div>
+        
 
         <div
           className={
             posts && posts.length === 0
               ? "mt-5 d-flex justify-content-center"
-              : "mt-5 d-flex justify-content-end"
+              : "mt-3 me-5 d-flex justify-content-end"
           }
         >
           <Button
@@ -263,23 +301,29 @@ function UserPosts() {
               <Form.Label>Tags:{" "}</Form.Label>
           
               <>
-                {selectedTags.map((tagName) => {
+                {selectedTags.map((tagId) => {
+                  const tag = tags.find((t) => t.id === tagId);
                   return (
-                    <div key={tagName} className="mx-1 badge bg-team-purple">
-                      {tagName}
+                    <div key={tag.id} className="mx-1 badge bg-team-purple">
+                      {tag.name}
                     </div>
                   );
                 })}
                 <div className="tag-selector mt-2">
                   <div className="tag-selector-input">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Search tags..."
-                      value={tagSearchTerm}
-                      onChange={handleTagSearchChange}
-                      onClick={toggleDropdown}
-                    />
+                  <FormControl
+                    type="text"
+                    className="form-control"
+                    placeholder="Search tags..."
+                    isInvalid={!hasTags}
+
+                    value={tagSearchTerm}
+                    onChange={handleTagSearchChange}
+                    onClick={toggleDropdown}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Please select a tag.
+                </Form.Control.Feedback>
                   </div>
                   {dropdownOpen && (
                     <div className="tag-selector-dropdown ps-4 pt-2">
@@ -291,7 +335,7 @@ function UserPosts() {
                             type="checkbox"
                             id={`tag-${tag.id}`}
                             value={tag.id}
-                            checked={selectedTags.includes(tag.name)}
+                            checked={selectedTags.includes(tag.id)}
                             onChange={() => handleTagSelection(tag)}
                           />
                           <label

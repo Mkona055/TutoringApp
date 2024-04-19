@@ -9,7 +9,7 @@ const SignUpLogin = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const [role, setRole] = useState();
+  const [role, setRole] = useState("STUDENT");
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState();
   const [location, setLocation] = useState();

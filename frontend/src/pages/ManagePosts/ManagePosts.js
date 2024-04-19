@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { deletePostById, fetchPostById } from "../../utils/api";
-import { Spinner } from "react-bootstrap";
+import { Spinner, Alert } from "react-bootstrap";
 import Footer from "../../components/Footer/Footer";
 import NavbarComp from "../../components/NavbarComp/NavbarComp";
 import PageTitle from "../../components/PageTitle/PageTitle";
@@ -13,7 +13,17 @@ function ManagePosts() {
   const [post, setPost] = useState();
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
-  const { isAuthenticated, token } = useAuth();
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const { isAuthenticated, token, authUser } = useAuth();
+
+  const handleCloseSuccessAlert = () => {
+    setShowSuccessAlert(false);
+  };
+
+  const handleCloseErrorAlert = () => {
+    setShowErrorAlert(false);
+  };
 
   const handleSearch = (idToSearch) => {
     if (idToSearch) {
@@ -24,9 +34,12 @@ function ManagePosts() {
   const handleDelete = (id) => {
     deletePostById(id, token).then(
       (result) => {
+        setShowSuccessAlert(true);
+        setPost(null);
         setIdToSearch(null);
       },
       (error) => {
+        setShowErrorAlert(true);
         console.log(error);
       }
     );
@@ -52,7 +65,7 @@ function ManagePosts() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idToSearch]);
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || authUser?.role !== "ADMIN") {
     return <Navigate to="/" />;
   } else {
     if (error) {
@@ -64,7 +77,7 @@ function ManagePosts() {
             className="d-flex justify-content-center align-items-center"
             style={{ height: "100vh" }}
           >
-            <Spinner animation="border" variant="danger" />
+            <Spinner animation="border" />
           </div>
         </>
       );
@@ -73,6 +86,27 @@ function ManagePosts() {
         <>
           <NavbarComp />
           <PageTitle title={"Manage posts"} />
+          <div className="container mt-3 d-flex justify-content-center">
+          <div className="w-50">
+            <Alert
+              show={showSuccessAlert}
+              variant="success"
+              onClose={handleCloseSuccessAlert}
+              dismissible
+            >
+              <p>Your changes were saved successfully!</p>
+            </Alert>
+            <Alert
+              show={showErrorAlert}
+              variant="danger"
+              onClose={handleCloseErrorAlert}
+              dismissible
+            >
+              <p>An error occurred while saving your changes</p>
+            </Alert>
+          </div>
+        </div>
+
           <Search type={"POST"} onSearch={handleSearch} />
 
           <div className="row g mb-5 ps-4 pe-4 pt-2 bg-white rounded-3 ms-5 mt-5 me-5 d-flex justify-content-center ">

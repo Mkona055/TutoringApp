@@ -32,12 +32,12 @@ public abstract class Post {
     @Column
     protected Double hourlyRate;
 
-    @ManyToOne(fetch = FetchType.EAGER) // was getting lazy error
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     protected User user;
 
     @ManyToMany
-    @JoinTable(name = "post_tag",
+    @JoinTable(name = "post_tag", 
             joinColumns = {@JoinColumn(name = "post_id")},
             inverseJoinColumns = {@JoinColumn(name = "tag_id")})
     protected Set<Tag> tags = new HashSet<>();
@@ -86,6 +86,9 @@ public abstract class Post {
 
     public Set<Tag> getTags() {
         return tags;
+    }
+    public void setTags(Set<Tag> set){
+        this.tags = set;
     }
 
     public void addTag(Tag t) {

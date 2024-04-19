@@ -7,3 +7,16 @@
     border: 1px solid var(--team-purple) !important;
     color: white !important;
 }
+
+.deleteButton {
+    display: none !important;
+  }
+  
+li:hover .deleteButton {
+    display: block !important;
+    padding: 0.5rem, 0.275rem !important;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}

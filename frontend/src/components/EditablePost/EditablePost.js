@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Modal, Form } from "react-bootstrap";
+import { Card, Button, Modal, Form, FormControl } from "react-bootstrap";
 import { BsPencil, BsTrash } from "react-icons/bs";
 import "./EditablePost.css";
+import useAuth from "../../hooks/useAuth";
 
 const EditablePost = ({ post, tags, onDelete, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -12,9 +13,8 @@ const EditablePost = ({ post, tags, onDelete, onUpdate }) => {
   const [tagSearchTerm, setTagSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [filteredTags, setFilteredTags] = useState([]);
-
-  // State for location selector
-  const [location, setLocation] = useState(post.location);
+  const [hasTags, setHasTags] = useState(false);
+  const {authUser} = useAuth();
 
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -33,43 +33,47 @@ const EditablePost = ({ post, tags, onDelete, onUpdate }) => {
 
 
   useEffect(() => {
-    const tagsSelected = selectedTags.map((tag) => {
-      const tagObj = tags.find((t) => t.id === tag);
-      return tagObj;
-    });
+    if (selectedTags.length > 0) {
+      setHasTags(true);
+    }else{
+      setHasTags(false);
+    }
 
     if (updatedPost) {
       setUpdatedPost((prevUpdatedPost) => ({
         ...prevUpdatedPost,
-        location: location,
-        tags: tagsSelected,
+        tags: selectedTags.join(','),
       }));
     }
     // eslint-disable-next-line
-  }, [selectedTags, location, tags]);
+  }, [selectedTags, tags]);
 
   const handleEdit = () => {
-    // onUpdate(updatedPost);    YOOOOO REVERTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-    console.log('Edit', updatedPost)
     setIsEditing(true);
   };
 
   const handleSaveChanges = () => {
     console.log("Updated Post:", updatedPost);
-    setIsEditing(false);
+    if (hasTags) {
+      onUpdate(updatedPost);    
+      setIsEditing(false);
+    }
   };
 
   const handleDelete = () => {
-    onDelete(post.id);
     setShowDeleteModal(true);
   };
 
   const confirmDelete = () => {
+    onDelete(post.id);
     setShowDeleteModal(false);
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+    if (name === "inPerson"){
+      value = value === "true" ? true : false;
+    }
     setUpdatedPost({
       ...updatedPost,
       [name]: value,
@@ -152,14 +156,19 @@ const EditablePost = ({ post, tags, onDelete, onUpdate }) => {
               })}
               <div className="tag-selector mt-2">
                 <div className="tag-selector-input">
-                  <input
+                  <FormControl
                     type="text"
                     className="form-control"
                     placeholder="Search tags..."
+                    isInvalid={!hasTags}
+
                     value={tagSearchTerm}
                     onChange={handleTagSearchChange}
                     onClick={toggleDropdown}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    Please select a tag.
+                </Form.Control.Feedback>
                 </div>
                 {dropdownOpen && (
                   <div className="tag-selector-dropdown ps-4 pt-2">
@@ -205,27 +214,26 @@ const EditablePost = ({ post, tags, onDelete, onUpdate }) => {
         {isEditing ? (
           <Form.Group controlId="exampleForm.ControlInput1">
             <Form.Label>
-              <strong>Location:</strong>
+              <strong>Location {updatedPost.inPerson ? `(${authUser.location}):` : ":"}</strong>
             </Form.Label>
             <select
               className="form-control"
               id="location"
-              value={location}
-              onChange={(e) =>
-                setLocation(e.target.value === "inPerson" ? true : false)
-              }
+              name="inPerson"
+              value={updatedPost.inPerson}
+              onChange={handleChange}
               required
             >
               <option value="" disabled>
                 Select a location
               </option>
-              <option value="inPerson">In person</option>
-              <option value="online">Online</option>
+              <option value={true}>In person</option>
+              <option value={false}>Online</option>
             </select>
           </Form.Group>
         ) : (
           <Card.Text>
-            <strong>Location:</strong> {post.location}
+            <strong>Location {post.inPerson ? `(${authUser.location}):` : ":"}</strong> {post.inPerson ? `In person:` : "Online"}
           </Card.Text>
         )}
         <Card.Text className="mt-2">

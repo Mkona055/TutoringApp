@@ -1,4 +1,4 @@
-import { fetchJSONDELETE, fetchJSONGET, fetchJSONPOST } from "./helper";
+import { fetchJSONDELETE, fetchJSONGET, fetchJSONPOST, fetchJSONPUT } from "./helper";
 
 export const SERVER_BASE_URL="http://localhost:8080";
 
@@ -88,14 +88,20 @@ export async function deleteUserById(userId, token) {
 
 export async function deletePostById(postId, token) {
     const res = await fetchJSONDELETE(`${SERVER_BASE_URL}/feed/post/${postId}/delete`, token);
-    if (res.ok){
+    if (res.status !== 404){
         return true;
     }else{
         return false;
     }
 }
 
-export async function updatePost(body, token) {
+export async function updatePostById(id, body, token) {
+    body = JSON.stringify(body);
+    const res = await fetchJSONPUT(`${SERVER_BASE_URL}/feed/post/${id}/update`, body, token);
+    if (res.ok){
+        const data = await res.json();        
+        return data;
+    }
 }
 
 export async function createPost(body, token) {
@@ -103,8 +109,35 @@ export async function createPost(body, token) {
     const res = await fetchJSONPOST(`${SERVER_BASE_URL}/feed/newpost`, body, token);
     if (res.ok){
         const data = await res.json();        
-        console.log(data);
+        return data;
+    }
+}
 
+// add create tag, delete tag by id and update tag by id
+
+export async function createTag(body, token) {
+    body = JSON.stringify(body);
+    const res = await fetchJSONPOST(`${SERVER_BASE_URL}/feed/newtag`, body, token);
+    if (res.ok){
+        const data = await res.json();        
+        return data;
+    }
+}
+
+export async function deleteTagById(id, token) {
+    const res = await fetchJSONDELETE(`${SERVER_BASE_URL}/feed/tag/${id}/delete`, token);
+    if (res.ok){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+export async function updateTagById(id, body, token) {
+    body = JSON.stringify(body);
+    const res = await fetchJSONPUT(`${SERVER_BASE_URL}/feed/tag/${id}/update`, body, token);
+    if (res.ok){
+        const data = await res.json();        
         return data;
     }
 }

@@ -1,7 +1,7 @@
 import "./Navbar.css";
 import {Container, Form, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { BsPerson, BsCardList } from "react-icons/bs";
+import { BsPerson, BsCardList, BsTags } from "react-icons/bs";
 import { GoSignOut } from "react-icons/go";
 import useAuth from "../../hooks/useAuth";
 
@@ -9,7 +9,6 @@ const NavbarComp = ({ onSearch }) => {
   const navigate = useNavigate();
   const {authUser, logout} = useAuth();
   const role = authUser.role;
-  console.log(authUser, role)
 
   function handleSignOut() {
     logout();
@@ -70,6 +69,9 @@ const NavbarComp = ({ onSearch }) => {
                   </NavDropdown.Item>
                   <NavDropdown.Item href="/manage-users">
                   <BsPerson />  Manage Users
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="/manage-tags">
+                  <BsTags/> Manage Tags
                   </NavDropdown.Item>
                 </>
               )}
