@@ -50,6 +50,7 @@ public class PostController {
         return new ResponseEntity<>(tags.findAll(), HttpStatus.OK);
     }
 
+
     @GetMapping("/post/{id}")
     public ResponseEntity<Post> getPost(@PathVariable int id) {
         Post post = posts.findById(id).orElse(null);
@@ -141,6 +142,15 @@ public class PostController {
         return new ResponseEntity<>(requests.findRequestsByTags_Name(tag), HttpStatus.OK);
     }
 
+    @PostMapping("/newtag")
+    public ResponseEntity<Tag> createTag(@RequestBody Map<String,String> tagFields) {
+        Tag tag = new Tag();
+        tag.setName(tagFields.get("name"));
+        tags.save(tag);
+        return new ResponseEntity<>(tag, HttpStatus.CREATED);
+    }
+
+
     @PostMapping("/savepost")
     public HttpStatus sendPost(Post p) {
         posts.save(p);
@@ -152,6 +162,34 @@ public class PostController {
         posts.delete(posts.findPostById(id));
         return HttpStatus.OK;
     }
+
+    @DeleteMapping("/tag/{id}/delete")
+    public HttpStatus deleteTagById(@PathVariable int id) {
+        Tag tag = tags.findTagById(id);
+        if (tag == null) {
+            return HttpStatus.NOT_FOUND;
+        }
+        List<String> name = new ArrayList<String>();
+        name.add(tag.getName());
+        List<Post> postsWithTag = posts.findPostsByTags_NameIn(name);
+        for (Post post : postsWithTag) {
+            post.getTags().remove(tag);
+            posts.save(post);
+        }
+        tags.delete(tag);
+        return HttpStatus.OK;
+    }
+
+    @PutMapping("/tag/{id}/update")
+    public ResponseEntity<Tag> updateTagById(@PathVariable int id, @RequestBody Map<String,String> tagFields) {
+        if (id != Integer.parseInt(tagFields.get("id"))) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Tag tagToUpdate = tags.findTagById(id);
+        if (tagToUpdate == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        tagToUpdate.setName(tagFields.get("name"));
+        tags.save(tagToUpdate);
+        return new ResponseEntity<>(tags.findTagById(id), HttpStatus.OK);
+    }
+
 
     @GetMapping("user/{id}/posts")
     public ResponseEntity<List<Post>> getPostsByUserId(@PathVariable int id) {

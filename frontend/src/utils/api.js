@@ -112,3 +112,32 @@ export async function createPost(body, token) {
         return data;
     }
 }
+
+// add create tag, delete tag by id and update tag by id
+
+export async function createTag(body, token) {
+    body = JSON.stringify(body);
+    const res = await fetchJSONPOST(`${SERVER_BASE_URL}/feed/newtag`, body, token);
+    if (res.ok){
+        const data = await res.json();        
+        return data;
+    }
+}
+
+export async function deleteTagById(id, token) {
+    const res = await fetchJSONDELETE(`${SERVER_BASE_URL}/feed/tag/${id}/delete`, token);
+    if (res.ok){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+export async function updateTagById(id, body, token) {
+    body = JSON.stringify(body);
+    const res = await fetchJSONPUT(`${SERVER_BASE_URL}/feed/tag/${id}/update`, body, token);
+    if (res.ok){
+        const data = await res.json();        
+        return data;
+    }
+}

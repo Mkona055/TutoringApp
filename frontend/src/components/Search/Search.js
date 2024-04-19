@@ -7,7 +7,7 @@ function Search({ type, onSearch }) {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (searchTerm.trim() === '') {
+    if (searchTerm.trim() === '' && type !== 'TAG') {
       setIsValid(false);
     } else {
       setIsValid(true);
@@ -25,7 +25,9 @@ function Search({ type, onSearch }) {
               placeholder={
                 type === 'USER'
                   ? 'Enter the id of the user'
-                  : 'Enter the id of the post'
+                  : type === 'TAG'
+                      ? 'Enter the name of the tag'
+                      : 'Enter the id of the post'
               }
               value={searchTerm}
               onChange={(e) => {
