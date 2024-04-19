@@ -102,10 +102,6 @@ public abstract class Post {
         return title;
     }
 
-    public void setTags(Set<Tag> newTags) {
-        tags = newTags;
-    }
-
     public void setTitle(String title) {
         this.title = title;
     }
