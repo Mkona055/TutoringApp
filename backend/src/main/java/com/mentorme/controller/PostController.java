@@ -1,5 +1,8 @@
 package com.mentorme.controller;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.mentorme.dao.*;
 import com.mentorme.model.Tag;
@@ -11,6 +14,8 @@ import com.mentorme.model.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.session.HttpSessionDestroyedEvent;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -55,7 +60,7 @@ public class PostController {
     public ResponseEntity<Post> getPost(@PathVariable int id) {
         Post post = posts.findById(id).orElse(null);
 
-        if (post==null) {
+        if (post == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             return new ResponseEntity<>(post, HttpStatus.OK);
@@ -100,9 +105,9 @@ public class PostController {
     ) {
         Set<Post> results = new HashSet<>(posts.findAll());
         // .retainAll() acts as intersection of two sets
-        if (tags!=null)             results.retainAll(posts.findPostsByTags_NameIn(tags));
-        if (maxHourlyRate!=null)    results.retainAll(posts.findPostsByHourlyRateIsLessThanEqual(maxHourlyRate));
-        if (location!=null)         results.retainAll(posts.findPostsByUser_Location(location));
+        if (tags != null)           results.retainAll(posts.findPostsByTags_NameIn(tags));
+        if (maxHourlyRate != null)  results.retainAll(posts.findPostsByHourlyRateIsLessThanEqual(maxHourlyRate));
+        if (location != null)       results.retainAll(posts.findPostsByUser_Location(location));
 
         return new ResponseEntity<>(new ArrayList<>(results), HttpStatus.OK);
     }
@@ -115,9 +120,9 @@ public class PostController {
     ) {
         Set<Request> results = new HashSet<>(requests.findAll());
         // .retainAll() acts as intersection of two sets
-        if (tags!=null)             results.retainAll(requests.findRequestsByTags_NameIn(tags));
-        if (maxHourlyRate!=null)    results.retainAll(requests.findRequestsByHourlyRateIsLessThanEqual(maxHourlyRate));
-        if (location!=null)         results.retainAll(requests.findRequestsByUser_Location(location));
+        if (tags != null)           results.retainAll(requests.findRequestsByTags_NameIn(tags));
+        if (maxHourlyRate != null)  results.retainAll(requests.findRequestsByHourlyRateIsLessThanEqual(maxHourlyRate));
+        if (location != null)       results.retainAll(requests.findRequestsByUser_Location(location));
 
         return new ResponseEntity<>(new ArrayList<>(results), HttpStatus.OK);
     }
@@ -130,9 +135,9 @@ public class PostController {
     ) {
         Set<Offer> results = new HashSet<>(offers.findAll());
         // .retainAll() acts as intersection of two sets
-        if (tags!=null)             results.retainAll(offers.findOffersByTags_NameIn(tags));
-        if (maxHourlyRate!=null)    results.retainAll(offers.findOffersByHourlyRateIsLessThanEqual(maxHourlyRate));
-        if (location!=null)         results.retainAll(offers.findOffersByUser_Location(location));
+        if (tags != null)           results.retainAll(offers.findOffersByTags_NameIn(tags));
+        if (maxHourlyRate != null)  results.retainAll(offers.findOffersByHourlyRateIsLessThanEqual(maxHourlyRate));
+        if (location != null)       results.retainAll(offers.findOffersByUser_Location(location));
 
         return new ResponseEntity<>(new ArrayList<>(results), HttpStatus.OK);
     }
