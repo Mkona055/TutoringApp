@@ -1,9 +1,5 @@
 package com.mentorme.controller;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.mentorme.dao.*;
 import com.mentorme.model.Tag;
 import com.mentorme.model.posts.Offer;
@@ -14,11 +10,7 @@ import com.mentorme.model.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.session.HttpSessionDestroyedEvent;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
 import java.util.*;
 
 @RestController

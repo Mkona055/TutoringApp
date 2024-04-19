@@ -2,9 +2,7 @@ package com.mentorme.controller;
 
 import com.mentorme.TestApplicationConfiguration;
 import com.mentorme.TestDatabaseInitialization;
-import com.mentorme.model.Tag;
 import com.mentorme.model.posts.Post;
-import com.mentorme.model.posts.Request;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +48,7 @@ class PostControllerTest {
         ResponseEntity<List<Post>> re = posts.getAllPosts();
 
         // TO MAP createQuery to a post correctly you need to be very specific about the names of tables (Note the capital P)
-        List postList = em.createQuery("SELECT p FROM Post p").getResultList();
+        List<Post> postList = em.createQuery("SELECT p FROM Post p", Post.class).getResultList();
 
         assertTrue(re.getStatusCode().is2xxSuccessful());
         try {
@@ -70,7 +67,7 @@ class PostControllerTest {
         ResponseEntity<List<Post>> justRate = posts.getPostsFiltered(null, 100.0, null);
         ResponseEntity<List<Post>> justLocation = posts.getPostsFiltered(null, null, "Rohan");
 
-        List p = em.createQuery("SELECT p FROM Post p WHERE id = 1").getResultList();
+        List<Post> p = em.createQuery("SELECT p FROM Post p WHERE id = 1", Post.class).getResultList();
 
         assertEquals(p, allThree.getBody());
         assertEquals(p, justTags.getBody());

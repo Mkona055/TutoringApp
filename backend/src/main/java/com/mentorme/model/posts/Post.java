@@ -3,9 +3,6 @@ package com.mentorme.model.posts;
 import com.mentorme.model.Tag;
 import com.mentorme.model.users.User;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;

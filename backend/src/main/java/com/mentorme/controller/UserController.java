@@ -3,11 +3,8 @@ package com.mentorme.controller;
 import com.mentorme.dao.AdminRepository;
 import com.mentorme.dao.StudentRepository;
 import com.mentorme.dao.TutorRepository;
-
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.function.Function;
-
 import com.mentorme.model.users.*;
 
 @RestController

@@ -50,7 +50,8 @@ VALUES (1, 'Swords'),
 INSERT INTO user (id, location, f_name, l_name, email, password, role)
 VALUES
     (1, 'Rohan', 'Took', 'Peregrin', 'second.breakfast@gmail.com', 'wigs', 'STUDENT'),
-    (2, 'Gondor', 'Merry', 'Mayweather', 'doesnt.know@gmail.com', 'whenwigs', 'TUTOR');
+    (2, 'Gondor', 'Merry', 'Mayweather', 'doesnt.know@gmail.com', 'whenwigs', 'TUTOR'),
+    (3, 'Toronto', 'Random', 'User', 'r.user@gmail.com', 'test', 'TUTOR');
 
 
 INSERT INTO post (id, title, in_person, post_desc, user_id, hourly_rate, type)

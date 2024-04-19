@@ -20,7 +20,6 @@ public abstract class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
-    //TODO check this^
 
     @Column(name = "location")
     protected String location;
@@ -48,6 +47,16 @@ public abstract class User implements UserDetails {
 //    protected List<Post> posts;
 
     public User() {
+    }
+
+    public User(User user) {
+        this.id = user.id;
+        this.email = user.email;
+        this.firstName = user.firstName;
+        this.lastName = user.lastName;
+        this.location = user.location;
+        this.passwordHash = user.passwordHash;
+        this.role = user.role;
     }
 
     public int getId() {

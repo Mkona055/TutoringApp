@@ -1,12 +1,8 @@
 package com.mentorme;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.EntityManager;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -26,6 +22,7 @@ public class TestDatabaseInitialization {
             while (fp.hasNext()) {
                 sqlScriptTest.add(fp.nextLine().trim());
             }
+            fp.close();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -51,6 +48,7 @@ public class TestDatabaseInitialization {
             while (fp.hasNext()) {
                 sqlScriptTest.add(fp.nextLine().trim());
             }
+            fp.close();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

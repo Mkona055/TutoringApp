@@ -10,6 +10,10 @@ public class Admin extends User {
         role = "ADMIN";
     }
 
+    public Admin(Admin admin) {
+        super(admin);
+    }
+
     //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    @Column(name = "id", nullable = false)

@@ -9,6 +9,10 @@ public class Tutor extends User {
         super();
         role = "TUTOR";
     }
+
+    public Tutor(Tutor tutor) {
+        super(tutor);
+    }
 //    public Tutor() {
 //        super();
 //        this.role = "TUTOR";

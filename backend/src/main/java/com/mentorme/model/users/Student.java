@@ -9,6 +9,10 @@ public class Student extends User {
         super();
         role = "STUDENT";
     }
+
+    public Student(Student student) {
+        super(student);
+    }
 //    public Student() {
 //        this.role = "STUDENT";
 //    }
